@@ -1,135 +1,112 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QCM Platform - Plateforme de Quiz en Ligne</title>
-
+    <title>Mon Espace QCM</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
 </head>
-<body class="bg-bg-light font-sans text-text antialiased">
+<body class="bg-bg-light text-text font-sans">
 
-    <header class="bg-surface sticky top-0 z-50 border-b border-border shadow-sm">
-        <div class="container mx-auto px-4">
-            <nav class="flex h-16 items-center justify-between">
-                <a href="#" class="flex items-center gap-2 text-xl font-bold text-primary">
-                    <i data-lucide="brain" class="h-6 w-6"></i>
-                    <span>QCM Platform</span>
-                </a>
-                <ul class="hidden items-center space-x-8 md:flex">
-                    <li><a href="#accueil" class="font-medium text-text transition-colors hover:text-primary">Accueil</a></li>
-                    <li><a href="#tableau-bord" class="font-medium text-text transition-colors hover:text-primary">Tableau de bord</a></li>
-                    <li><a href="#aide" class="font-medium text-text transition-colors hover:text-primary">Aide</a></li>
-                    <li><a href="#connexion" class="bg-primary text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-primary-dark hover:-translate-y-0.5 transition-all">Se connecter</a></li>
-                </ul>
-            </nav>
+    <!-- HEADER SIMPLE -->
+    <header class="bg-white shadow-sm border-b border-border">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4">
+            <div class="flex items-center gap-2 text-xl font-bold text-primary">
+                <i data-lucide="graduation-cap" class="h-6 w-6"></i>
+                <span>Mon Espace QCM</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Boutons de connexion -->
+                <div class="flex items-center gap-2">
+                    <button class="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition font-medium">
+                        <i data-lucide="user" class="h-4 w-4 inline mr-2"></i>
+                        Client
+                    </button>
+                    <button class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary-dark transition font-medium">
+                        <i data-lucide="shield" class="h-4 w-4 inline mr-2"></i>
+                        Admin
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main>
-        <section id="accueil" class="bg-secondary px-4 py-20 text-center text-white">
-            <div class="container mx-auto">
-                <h1 class="mb-4 text-4xl font-bold md:text-5xl">Plateforme QCM Interactive</h1>
-                <p class="mx-auto mb-8 max-w-2xl text-lg opacity-90 md:text-xl">Créez, gérez et administrez vos quiz en ligne facilement.</p>
-                <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                    <a href="#tableau-bord" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 px-6 font-semibold text-white shadow-lg transition-all hover:-translate-y-1 hover:bg-primary-dark sm:w-auto">
-                        <i data-lucide="graduation-cap" class="h-5 w-5"></i>
-                        Espace Enseignant
-                    </a>
-                    <a href="#tableau-bord" class="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-primary bg-surface py-3 px-6 font-semibold text-primary transition-all hover:-translate-y-1 hover:bg-primary hover:text-white sm:w-auto">
-                        <i data-lucide="user" class="h-5 w-5"></i>
-                        Espace Étudiant
-                    </a>
+    <!-- CONTENU PRINCIPAL -->
+    <main class="container mx-auto px-4 py-8">
+        
+        <!-- TITRE DE BIENVENUE -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-primary mb-2">Bienvenue dans votre espace QCM</h1>
+            <p class="text-text-muted">Accédez à vos quiz et consultez vos résultats</p>
+        </div>
+
+        <!-- ACTIONS PRINCIPALES -->
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-10">
+            
+            <!-- Quiz Disponibles -->
+            <div class="bg-white rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition">
+                <div class="text-center">
+                    <div class="p-4 rounded-lg bg-primary-light mx-auto w-fit mb-4">
+                        <i data-lucide="play-circle" class="w-8 h-8 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary mb-2">Passer un QCM</h3>
+                    <p class="text-text-muted mb-4">Quiz disponibles à réaliser</p>
+                    <button class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
+                        Voir les quiz
+                    </button>
                 </div>
             </div>
-        </section>
 
-        <div id="tableau-bord" class="container mx-auto px-4 py-16">
-            <div class="overflow-hidden rounded-xl border border-border bg-surface shadow-lg">
-                <div class="flex border-b border-border">
-                    <button data-tab-target="dashboard" class="tab active flex-1 border-b-2 border-primary p-4 font-semibold text-primary transition-colors">Tableau de bord</button>
-                    <button data-tab-target="create-quiz" class="tab flex-1 border-b-2 border-transparent p-4 font-semibold text-text-muted transition-colors hover:text-primary">Créer un QCM</button>
-                    <button data-tab-target="take-quiz" class="tab flex-1 border-b-2 border-transparent p-4 font-semibold text-text-muted transition-colors hover:text-primary">Passer un QCM</button>
-                    <button data-tab-target="results" class="tab flex-1 border-b-2 border-transparent p-4 font-semibold text-text-muted transition-colors hover:text-primary">Résultats</button>
-                </div>
-
-                <div class="p-6 md:p-8">
-                    <div id="dashboard" class="tab-content">
-                        <h2 class="mb-6 text-2xl font-bold text-secondary">Tableau de bord</h2>
-                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            <div class="rounded-lg border border-border bg-surface p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-                                <div class="flex items-center gap-4">
-                                    <div class="rounded-lg bg-primary p-3 text-white">
-                                        <i data-lucide="file-text" class="h-6 w-6"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-secondary">Créer un nouveau QCM</h3>
-                                        <p class="text-sm text-text-muted">Concevez facilement vos questionnaires.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rounded-lg border border-border bg-surface p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-                                <div class="flex items-center gap-4">
-                                    <div class="rounded-lg bg-primary p-3 text-white">
-                                        <i data-lucide="users" class="h-6 w-6"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-secondary">Gérer les classes</h3>
-                                        <p class="text-sm text-text-muted">Organisez vos étudiants par groupes.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rounded-lg border border-border bg-surface p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-                                <div class="flex items-center gap-4">
-                                    <div class="rounded-lg bg-primary p-3 text-white">
-                                        <i data-lucide="bar-chart-2" class="h-6 w-6"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-secondary">Analyser les résultats</h3>
-                                        <p class="text-sm text-text-muted">Consultez les statistiques détaillées.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Mes Résultats -->
+            <div class="bg-white rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition">
+                <div class="text-center">
+                    <div class="p-4 rounded-lg bg-secondary-light mx-auto w-fit mb-4">
+                        <i data-lucide="bar-chart-3" class="w-8 h-8 text-secondary"></i>
                     </div>
-
-                    <div id="create-quiz" class="tab-content hidden">
-                        <h2 class="mb-6 text-2xl font-bold text-secondary">Créer un nouveau QCM</h2>
-                        <form class="max-w-xl">
-                            <div class="space-y-6">
-                                <div>
-                                    <label for="quiz-title" class="mb-1 block text-sm font-medium text-text-muted">Titre du QCM</label>
-                                    <input type="text" id="quiz-title" placeholder="Ex: Évaluation de Mathématiques" class="form-input block w-full rounded-md border-border shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
-                                </div>
-                                <div>
-                                    <label for="quiz-description" class="mb-1 block text-sm font-medium text-text-muted">Description</label>
-                                    <textarea id="quiz-description" rows="3" placeholder="Brève description du contenu du quiz" class="form-textarea block w-full rounded-md border-border shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"></textarea>
-                                </div>
-                                <button type="submit" class="bg-primary text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-primary-dark hover:-translate-y-0.5 transition-all">
-                                    Enregistrer le QCM
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div id="take-quiz" class="tab-content hidden">
-                        <h2 class="mb-6 text-2xl font-bold text-secondary">Passer un QCM</h2>
-                        <p class="text-text-muted">Ici se trouvera l'interface pour que l'étudiant puisse passer un quiz.</p>
-                    </div>
-
-                    <div id="results" class="tab-content hidden">
-                         <h2 class="mb-6 text-2xl font-bold text-secondary">Résultats et Statistiques</h2>
-                         <p class="text-text-muted">Ici s'afficheront les résultats détaillés des quiz passés.</p>
-                    </div>
+                    <h3 class="text-xl font-semibold text-secondary mb-2">Mes Résultats</h3>
+                    <p class="text-text-muted mb-4">Consultez vos notes et performances</p>
+                    <button class="w-full bg-secondary text-white py-3 rounded-lg font-semibold hover:bg-secondary-dark transition">
+                        Voir les résultats
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- STATISTIQUES RAPIDES -->
+        <div class="bg-white rounded-xl border border-border p-6 shadow-sm max-w-4xl mx-auto">
+            <h3 class="text-lg font-semibold text-primary mb-4">Aperçu rapide</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center p-4 bg-bg-light rounded-lg">
+                    <div class="text-2xl font-bold text-primary">5</div>
+                    <div class="text-sm text-text-muted">Quiz disponibles</div>
+                </div>
+                <div class="text-center p-4 bg-bg-light rounded-lg">
+                    <div class="text-2xl font-bold text-secondary">12</div>
+                    <div class="text-sm text-text-muted">Quiz complétés</div>
+                </div>
+                <div class="text-center p-4 bg-bg-light rounded-lg">
+                    <div class="text-2xl font-bold text-accent">85%</div>
+                    <div class="text-sm text-text-muted">Moyenne générale</div>
+                </div>
+                <div class="text-center p-4 bg-bg-light rounded-lg">
+                    <div class="text-2xl font-bold text-primary">3</div>
+                    <div class="text-sm text-text-muted">Matières actives</div>
+                </div>
+            </div>
+        </div>
+
     </main>
+
+    <!-- FOOTER SIMPLE -->
+    <footer class="bg-white border-t border-border mt-12 py-4">
+        <div class="container mx-auto px-4 text-center text-sm text-text-muted">
+            © 2025 Plateforme QCM - Espace Étudiant
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
