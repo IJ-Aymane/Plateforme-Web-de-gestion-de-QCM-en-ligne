@@ -17,16 +17,14 @@
             </div>
             <div class="flex items-center gap-4">
                 <!-- Boutons de connexion -->
-                <div class="flex items-center gap-2">
-                    <button class="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition font-medium">
-                        <i data-lucide="user" class="h-4 w-4 inline mr-2"></i>
-                        Client
-                    </button>
-                    <button class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary-dark transition font-medium">
-                        <i data-lucide="shield" class="h-4 w-4 inline mr-2"></i>
-                        Admin
-                    </button>
-                </div>
+            <div class="flex items-center gap-2">
+                <a href="{{ url('/login') }}" 
+                class="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition font-medium">
+                    <i data-lucide="user" class="h-4 w-4 inline mr-2"></i>
+                    Login
+                </a>
+            </div>
+
             </div>
         </div>
     </header>
