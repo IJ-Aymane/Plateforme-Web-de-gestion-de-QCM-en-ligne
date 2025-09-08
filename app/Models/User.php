@@ -2,47 +2,49 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+// 🔹 Import des modèles utilisés dans les relations
+use App\Models\Qcm;
+use App\Models\Resultat;
+
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    // 🔹 Relations
+
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Qcm>
      */
-    protected function casts(): array
+    public function qcms()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Qcm::class, 'enseignant_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Resultat>
+     */
+    public function resultats()
+    {
+        return $this->hasMany(Resultat::class, 'etudiant_id');
     }
 }
