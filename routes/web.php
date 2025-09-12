@@ -18,6 +18,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 
+// Password reset routes (if needed)
+Route::get('/password/reset', [AuthController::class, 'showResetForm'])->name('password.request');
+Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
+
 // =============================
 // Public routes
 // =============================
@@ -38,23 +42,63 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('role:etudiant');
 
     // =========================
-    // Teacher routes
+    // Teacher routes (Enseignant only)
     // =========================
     Route::middleware('role:enseignant')->group(function () {
+        
+        // QCM Management
         Route::resource('qcm', QcmController::class);
+        
+        // Questions Management
         Route::resource('questions', QuestionController::class);
-        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        
+        // User Management - Complete CRUD operations
+        Route::resource('users', UserController::class)->names([
+            'index' => 'users.index',
+            'create' => 'users.create',
+            'store' => 'users.store',
+            'show' => 'users.show',
+            'edit' => 'users.edit',
+            'update' => 'users.update',
+            'destroy' => 'users.destroy',
+        ]);
+        
+        // Results Management
         Route::get('/resultats', [ResultatController::class, 'index'])->name('resultats.index');
+        Route::get('/resultats/{resultat}', [ResultatController::class, 'show'])->name('resultats.show');
+        Route::delete('/resultats/{resultat}', [ResultatController::class, 'destroy'])->name('resultats.destroy');
+        
+        // Settings
         Route::get('/settings', [DashboardController::class, 'settings'])->name('settings.index');
+        Route::put('/settings', [DashboardController::class, 'updateSettings'])->name('settings.update');
     });
 
     // =========================
-    // Student routes
+    // Student routes (Étudiant only)
     // =========================
     Route::middleware('role:etudiant')->group(function () {
+        
+        // Available QCMs for students
         Route::get('/qcm/available', [QcmController::class, 'available'])->name('qcm.available');
-        Route::get('/student/results', [ResultatController::class, 'studentResults'])->name('student.results');
+        
+        // Take QCM
         Route::get('/qcm/{qcm}/take', [QcmController::class, 'take'])->name('qcm.take');
         Route::post('/qcm/{qcm}/submit', [QcmController::class, 'submit'])->name('qcm.submit');
+        
+        // Student Results
+        Route::get('/student/results', [ResultatController::class, 'studentResults'])->name('student.results');
+        Route::get('/student/results/{resultat}', [ResultatController::class, 'studentResultShow'])->name('student.results.show');
     });
+
+    // =========================
+    // Shared routes (Both roles)
+    // =========================
+    
+    // Profile management
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile.show');
+    Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password');
+    
+    // Dashboard redirect based on role
+    Route::get('/dashboard', [DashboardController::class, 'redirectToDashboard'])->name('dashboard');
 });

@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Mon Espace QCM</title>
+    <title>Inscription - Mon Espace QCM</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    {{-- Style spinner pour bouton --}}
+    {{-- Style pour le spinner du bouton --}}
     <style>
         .spinner {
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -25,98 +24,76 @@
 
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full bg-white p-8 rounded-2xl border border-border shadow-sm space-y-8">
-            
-            {{-- Logo + titre --}}
             <div class="flex justify-center items-center gap-2 text-2xl font-bold text-primary">
                 <i data-lucide="graduation-cap" class="h-8 w-8"></i>
                 <span>Mon Espace QCM</span>
             </div>
-            
             <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                Connexion à votre compte
+                Créez votre compte
             </h2>
-
-            {{-- Messages d'erreurs --}}
-            @if ($errors->any())
-                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                    <ul class="list-disc pl-5 text-red-700 text-sm">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            {{-- Message de succès (ex: inscription réussie) --}}
-            @if(session('success'))
-                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 text-green-800 text-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            {{-- Formulaire login --}}
-            <form id="login-form" class="mt-8 space-y-6" action="{{ route('login.submit') }}" method="POST">
+            
+            <form id="register-form" class="mt-8 space-y-6" action="{{ route('register.submit') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
+                    
+                    <div>
+                        <label for="name" class="block text-sm font-medium">Nom complet</label>
+                        <input id="name" name="name" type="text" required value="{{ old('name') }}"
+                               class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('name') border-red-500 @else border-border @enderror">
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                    {{-- Email --}}
+                    {{-- CHAMP EMAIL (inchangé) --}}
                     <div>
                         <label for="email" class="block text-sm font-medium">Adresse e-mail</label>
-                        <input id="email" name="email" type="email" required autofocus value="{{ old('email') }}"
-                            class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('email') border-red-500 @else border-border @enderror">
+                        <input id="email" name="email" type="email" required value="{{ old('email') }}"
+                               class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('email') border-red-500 @else border-border @enderror">
                         @error('email')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    {{-- Mot de passe avec toggle --}}
+                    {{-- CHAMP MOT DE PASSE (inchangé) --}}
                     <div>
                         <label for="password" class="block text-sm font-medium">Mot de passe</label>
                         <div class="relative mt-1">
                             <input id="password" name="password" type="password" required
-                                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('password') border-red-500 @else border-border @enderror">
+                                   class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('password') border-red-500 @else border-border @enderror">
                             <button type="button" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500" onclick="togglePassword('password')">
                                 <i data-lucide="eye" class="h-5 w-5"></i>
                             </button>
                         </div>
-                        @error('password')
+                         @error('password')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
 
-                {{-- Options (Remember me + Mot de passe oublié) --}}
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input id="remember_me" name="remember" type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded">
-                        <label for="remember_me" class="ml-2 block text-sm text-gray-900">
-                            Se souvenir de moi
-                        </label>
-                    </div>
-                    @if (Route::has('password.request'))
-                        <div class="text-sm">
-                            <a href="{{ route('password.request') }}" class="font-medium text-primary hover:text-primary-dark">
-                                Mot de passe oublié ?
-                            </a>
+                    {{-- CHAMP CONFIRMATION MOT DE PASSE (inchangé) --}}
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium">Confirmer le mot de passe</label>
+                         <div class="relative mt-1">
+                            <input id="password_confirmation" name="password_confirmation" type="password" required
+                                   class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary">
+                             <button type="button" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500" onclick="togglePassword('password_confirmation')">
+                                <i data-lucide="eye" class="h-5 w-5"></i>
+                            </button>
                         </div>
-                    @endif
+                    </div>
                 </div>
-
-                {{-- Bouton avec spinner --}}
                 <div>
                     <button type="submit" id="submit-button"
-                        class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition disabled:opacity-50">
-                        Se connecter
+                            class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition disabled:opacity-50">
+                        S'inscrire
                     </button>
                 </div>
             </form>
-
-            {{-- Lien vers inscription --}}
             <div class="border-t border-border pt-6">
                 <p class="text-center text-sm text-text-muted">
-                    Pas encore de compte ?
-                    <a href="{{ route('register') }}" class="font-medium text-primary hover:text-primary-dark">
-                        Inscrivez-vous
+                    Déjà un compte ?
+                    <a href="{{ route('login') }}" class="font-medium text-primary hover:text-primary-dark">
+                        Connectez-vous
                     </a>
                 </p>
             </div>
@@ -141,14 +118,14 @@
             lucide.createIcons();
         }
 
-        const form = document.getElementById('login-form');
+        const form = document.getElementById('register-form');
         const submitButton = document.getElementById('submit-button');
         
         form.addEventListener('submit', function() {
             submitButton.disabled = true;
             submitButton.innerHTML = `
                 <div class="spinner"></div>
-                <span>Connexion en cours...</span>
+                <span>Inscription en cours...</span>
             `;
         });
     </script>
