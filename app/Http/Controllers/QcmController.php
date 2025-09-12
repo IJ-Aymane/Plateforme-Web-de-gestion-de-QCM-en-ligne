@@ -17,12 +17,12 @@ class QcmController extends Controller
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
 
-        $qcms = Qcm::where('enseignant_id', $user->id)
+        $qcm = Qcm::where('enseignant_id', $user->id)
                    ->with('questions')
                    ->latest()
                    ->paginate(10);
 
-        return view('qcm.index', compact('qcms')); // View path: resources/views/qcm/index.blade.php
+        return view('qcm.index', compact('qcm')); // View path: resources/views/qcm/index.blade.php
     }
 
     public function create()

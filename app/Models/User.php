@@ -49,7 +49,7 @@ class User extends Authenticatable
     /**
      * Relations
      */
-    public function qcms()
+    public function qcm()
     {
         return $this->hasMany(Qcm::class, 'enseignant_id');
     }

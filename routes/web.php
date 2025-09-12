@@ -78,7 +78,7 @@ Route::middleware(['auth'])->group(function () {
     // =========================
     Route::middleware('role:etudiant')->group(function () {
         
-        // Available QCMs for students
+        // Available qcm for students
         Route::get('/qcm/available', [QcmController::class, 'available'])->name('qcm.available');
         
         // Take QCM

@@ -21,7 +21,7 @@ class DashboardController extends Controller
 
             if ($user->role === 'enseignant') {
                 $data = [
-                    'userQcmCount' => $user->qcms()->count(),
+                    'userQcmCount' => $user->qcm()->count(),
                     'userQuestionsCount' => Question::whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))->count(),
                     'studentsCount' => User::where('role', 'etudiant')->count(),
                     'totalAttempts' => Resultat::whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))->count(),
@@ -48,11 +48,11 @@ class DashboardController extends Controller
 
         $data = [
             'totalStudents' => User::where('role', 'etudiant')->count(),
-            'totalQcm' => $user->qcms()->count(),
+            'totalQcm' => $user->qcm()->count(),
             'totalQuestions' => Question::whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))->count(),
             'averageScore' => Resultat::whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))
                 ->avg(DB::raw('score * 100 / total_questions')) ?? 0,
-            'recentQcm' => $user->qcms()->withCount(['questions', 'resultats'])->latest()->take(10)->get(),
+            'recentQcm' => $user->qcm()->withCount(['questions', 'resultats'])->latest()->take(10)->get(),
             'recentResults' => Resultat::with(['etudiant', 'qcm'])
                 ->whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))
                 ->latest()->take(10)->get(),

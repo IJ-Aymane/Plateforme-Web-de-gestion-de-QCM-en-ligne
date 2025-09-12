@@ -18,8 +18,8 @@ class QuestionController extends Controller
    
     public function create()
     {
-        $qcms = Qcm::all();
-        return view('questions.create', compact('qcms'));
+        $qcm = Qcm::all();
+        return view('questions.create', compact('qcm'));
     }
 
    
@@ -50,8 +50,8 @@ class QuestionController extends Controller
     
     public function edit(Question $question)
     {
-        $qcms = Qcm::all();
-        return view('questions.edit', compact('question', 'qcms'));
+        $qcm = Qcm::all();
+        return view('questions.edit', compact('question', 'qcm'));
     }
 
     public function update(Request $request, Question $question)
