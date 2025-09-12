@@ -30,19 +30,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // 🔹 Relations
+   
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Qcm>
-     */
+   
     public function qcms()
     {
         return $this->hasMany(Qcm::class, 'enseignant_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Resultat>
-     */
+    
     public function resultats()
     {
         return $this->hasMany(Resultat::class, 'etudiant_id');

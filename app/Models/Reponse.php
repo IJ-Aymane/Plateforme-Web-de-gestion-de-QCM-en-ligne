@@ -15,7 +15,7 @@ class Reponse extends Model
         'is_correct',
     ];
 
-    // Relation avec Question
+
     public function question()
     {
         return $this->belongsTo(Question::class, 'question_id');

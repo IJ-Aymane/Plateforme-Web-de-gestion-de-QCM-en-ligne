@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $data = [];
 
         if (Auth::check()) {
-            /** @var User $user */
+           
             $user = Auth::user();
 
             if ($user->role === 'enseignant') {
@@ -43,7 +43,7 @@ class DashboardController extends Controller
 
     public function adminDashboard()
     {
-        /** @var User $user */
+       
         $user = Auth::user();
 
         $data = [

@@ -16,7 +16,7 @@ class ResultatController extends Controller
 
     public function studentResults()
     {
-        /** @var \App\Models\User $user */
+   
         $user = Auth::user(); // récupère l'utilisateur authentifié avec typage explicite
         $resultats = Resultat::where('user_id', $user->id)->get();
         return view('resultats.student', compact('resultats'));

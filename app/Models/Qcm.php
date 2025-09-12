@@ -12,7 +12,7 @@ class Qcm extends Model
     protected $fillable = [
         'titre',
         'description',
-        'user_id',
+        'enseignant_id',
     ];
 
     // Relation avec User (créateur du QCM)

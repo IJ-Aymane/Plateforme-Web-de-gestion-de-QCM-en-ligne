@@ -8,27 +8,21 @@ use App\Models\Qcm;
 
 class QuestionController extends Controller
 {
-    /**
-     * Display a listing of the questions.
-     */
+   
     public function index()
     {
         $questions = Question::with('qcm')->latest()->paginate(10);
         return view('questions.index', compact('questions'));
     }
 
-    /**
-     * Show the form for creating a new question.
-     */
+   
     public function create()
     {
         $qcms = Qcm::all();
         return view('questions.create', compact('qcms'));
     }
 
-    /**
-     * Store a newly created question in storage.
-     */
+   
     public function store(Request $request)
     {
         $request->validate([
@@ -48,26 +42,18 @@ class QuestionController extends Controller
         return redirect()->route('questions.index')->with('success', 'Question créée avec succès.');
     }
 
-    /**
-     * Display the specified question.
-     */
     public function show(Question $question)
     {
         return view('questions.show', compact('question'));
     }
 
-    /**
-     * Show the form for editing the specified question.
-     */
+    
     public function edit(Question $question)
     {
         $qcms = Qcm::all();
         return view('questions.edit', compact('question', 'qcms'));
     }
 
-    /**
-     * Update the specified question in storage.
-     */
     public function update(Request $request, Question $question)
     {
         $request->validate([
@@ -87,9 +73,7 @@ class QuestionController extends Controller
         return redirect()->route('questions.index')->with('success', 'Question mise à jour avec succès.');
     }
 
-    /**
-     * Remove the specified question from storage.
-     */
+   
     public function destroy(Question $question)
     {
         $question->delete();

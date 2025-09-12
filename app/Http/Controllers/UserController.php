@@ -7,26 +7,20 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of all users.
-     */
+ 
     public function index()
     {
         $users = User::latest()->paginate(10);
         return view('users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new user.
-     */
+    
     public function create()
     {
         return view('users.create');
     }
 
-    /**
-     * Store a newly created user in storage.
-     */
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -46,17 +40,13 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
     }
 
-    /**
-     * Show the form for editing the specified user.
-     */
+    
     public function edit(User $user)
     {
         return view('users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified user in storage.
-     */
+   
     public function update(Request $request, User $user)
     {
         $request->validate([
@@ -76,9 +66,6 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified user from storage.
-     */
     public function destroy(User $user)
     {
         $user->delete();
