@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Mon Espace QCM</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    {{-- Style pour le spinner du bouton --}}
     <style>
         .spinner {
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -21,7 +20,6 @@
     </style>
 </head>
 <body class="bg-bg-light text-text font-sans">
-
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full bg-white p-8 rounded-2xl border border-border shadow-sm space-y-8">
             <div class="flex justify-center items-center gap-2 text-2xl font-bold text-primary">
@@ -31,21 +29,43 @@
             <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
                 Créez votre compte
             </h2>
+
+            {{-- Messages d'erreurs --}}
+            @if ($errors->any())
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                    <ul class="list-disc pl-5 text-red-700 text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             
             <form id="register-form" class="mt-8 space-y-6" action="{{ route('register.submit') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
                     
+                    {{-- Nom --}}
                     <div>
-                        <label for="name" class="block text-sm font-medium">Nom complet</label>
-                        <input id="name" name="name" type="text" required value="{{ old('name') }}"
-                               class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('name') border-red-500 @else border-border @enderror">
-                        @error('name')
+                        <label for="nom" class="block text-sm font-medium">Nom</label>
+                        <input id="nom" name="nom" type="text" required value="{{ old('nom') }}"
+                               class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('nom') border-red-500 @else border-border @enderror">
+                        @error('nom')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    {{-- CHAMP EMAIL (inchangé) --}}
+                    {{-- Prénom --}}
+                    <div>
+                        <label for="prenom" class="block text-sm font-medium">Prénom</label>
+                        <input id="prenom" name="prenom" type="text" required value="{{ old('prenom') }}"
+                               class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('prenom') border-red-500 @else border-border @enderror">
+                        @error('prenom')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Email --}}
                     <div>
                         <label for="email" class="block text-sm font-medium">Adresse e-mail</label>
                         <input id="email" name="email" type="email" required value="{{ old('email') }}"
@@ -55,7 +75,21 @@
                         @enderror
                     </div>
 
-                    {{-- CHAMP MOT DE PASSE (inchangé) --}}
+                    {{-- Rôle --}}
+                    <div>
+                        <label for="role" class="block text-sm font-medium">Je suis :</label>
+                        <select id="role" name="role" required
+                                class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary @error('role') border-red-500 @else border-border @enderror">
+                            <option value="">Sélectionnez votre rôle</option>
+                            <option value="etudiant" {{ ($role ?? old('role')) == 'etudiant' ? 'selected' : '' }}>Étudiant</option>
+                            <option value="enseignant" {{ ($role ?? old('role')) == 'enseignant' ? 'selected' : '' }}>Enseignant</option>
+                        </select>
+                        @error('role')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Mot de passe --}}
                     <div>
                         <label for="password" class="block text-sm font-medium">Mot de passe</label>
                         <div class="relative mt-1">
@@ -70,7 +104,7 @@
                         @enderror
                     </div>
 
-                    {{-- CHAMP CONFIRMATION MOT DE PASSE (inchangé) --}}
+                    {{-- Confirmation mot de passe --}}
                     <div>
                         <label for="password_confirmation" class="block text-sm font-medium">Confirmer le mot de passe</label>
                          <div class="relative mt-1">
@@ -81,6 +115,7 @@
                             </button>
                         </div>
                     </div>
+
                 </div>
                 <div>
                     <button type="submit" id="submit-button"
@@ -89,6 +124,7 @@
                     </button>
                 </div>
             </form>
+
             <div class="border-t border-border pt-6">
                 <p class="text-center text-sm text-text-muted">
                     Déjà un compte ?
@@ -106,8 +142,9 @@
 
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
-            const icon = field.nextElementSibling.querySelector('i');
-            
+            const button = field.parentElement.querySelector('button');
+            const icon = button.querySelector('i');
+
             if (field.type === 'password') {
                 field.type = 'text';
                 icon.setAttribute('data-lucide', 'eye-off');
@@ -120,7 +157,7 @@
 
         const form = document.getElementById('register-form');
         const submitButton = document.getElementById('submit-button');
-        
+
         form.addEventListener('submit', function() {
             submitButton.disabled = true;
             submitButton.innerHTML = `

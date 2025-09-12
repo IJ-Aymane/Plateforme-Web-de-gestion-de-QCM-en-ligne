@@ -5,7 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $nom
+ * @property string $prenom
+ * @property string $email
+ * @property string $password
+ * @property string $role
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ *
+ * Relations:
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Qcm> $qcm
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Resultat> $resultats
+ *
+ * Accessors:
+ * @property-read string $full_name
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -16,11 +35,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'nom',           // ✅ Changé de 'name' à 'nom'
-        'prenom',        // ✅ Ajouté
-        'email',         // ✅ Gardé
-        'password',      // ✅ Gardé
-        'role',          // ✅ Ajouté
+        'nom',
+        'prenom',
+        'email',
+        'password',
+        'role',
     ];
 
     /**
@@ -34,27 +53,24 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     /**
      * Relations
      */
-    public function qcm()
+    public function qcm(): HasMany
     {
         return $this->hasMany(Qcm::class, 'enseignant_id');
     }
 
-    public function resultats()
+    public function resultats(): HasMany
     {
         return $this->hasMany(Resultat::class, 'etudiant_id');
     }
@@ -75,7 +91,7 @@ class User extends Authenticatable
     /**
      * Accessors
      */
-    public function getFullNameAttribute()
+    public function getFullNameAttribute(): string
     {
         return $this->nom . ' ' . $this->prenom;
     }
