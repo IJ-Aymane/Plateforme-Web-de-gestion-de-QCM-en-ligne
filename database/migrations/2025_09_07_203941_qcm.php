@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('prenom', 100);
             $table->string('email', 255)->unique();
             $table->string('password', 255);
-            $table->enum('role', ['enseignant', 'etudiant'])->default('etudiant');
+            $table->enum('role', ['enseignant', 'etudiant','admin'])->default('etudiant');
             $table->timestamps(); // This creates created_at and updated_at
         });
 
