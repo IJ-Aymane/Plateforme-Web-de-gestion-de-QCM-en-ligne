@@ -15,19 +15,18 @@ class Qcm extends Model
         'enseignant_id',
     ];
 
-    // Relation avec User (créateur du QCM)
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relation avec Question
+
     public function questions()
     {
         return $this->hasMany(Question::class);
     }
 
-    // Relation avec Resultat
+
     public function resultats()
     {
         return $this->hasMany(Resultat::class);

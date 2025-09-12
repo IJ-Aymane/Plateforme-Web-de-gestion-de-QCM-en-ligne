@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-// 🔹 Import des modèles utilisés dans les relations
+
 use App\Models\Qcm;
 use App\Models\Resultat;
 

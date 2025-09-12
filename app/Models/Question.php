@@ -26,7 +26,7 @@ class Question extends Model
         return $this->belongsTo(Qcm::class, 'qcm_id');
     }
 
-    // Relation avec les réponses
+
     public function reponses()
     {
         return $this->hasMany(Reponse::class, 'question_id');
