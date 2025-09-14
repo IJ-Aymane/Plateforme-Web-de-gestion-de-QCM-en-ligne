@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-class AuthController extends Controller
+class AuthController 
 {
     /**
      * Display the login view.

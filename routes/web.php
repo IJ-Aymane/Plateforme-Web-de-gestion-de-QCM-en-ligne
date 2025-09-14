@@ -67,9 +67,24 @@ Route::middleware(['auth'])->group(function () {
     // QCM routes (for students)
     // =========================
     // Available QCM for students
+    Route::get('/qcms', [QcmController::class, 'index'])->name('qcm.index');
     Route::get('/qcm/available', [QcmController::class, 'available'])->name('qcm.available');
     Route::get('/qcm/{qcm}/take', [QcmController::class, 'take'])->name('qcm.take');
     Route::post('/qcm/{qcm}/submit', [QcmController::class, 'submit'])->name('qcm.submit');
+    Route::get('/qcm/create', [QcmController::class, 'create'])->name('qcm.create');
+    Route::get('/qcm/{id}', [QcmController::class, 'show'])->name('qcm.show');
+    Route::get('/qcm/{id}/edit', [QcmController::class, 'edit'])->name('qcm.edit');   
+    Route::delete('/qcm/{id}', [QcmController::class, 'destroy'])->name('qcm.destroy');
+
+
+    Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
+    Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');  
+    Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+    Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('questions.show');
+    Route::get('/questions/{id}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
+    Route::put('/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
+    Route::delete('/questions/{id}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+
     
     // =========================
     // Student routes
@@ -99,6 +114,12 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/my-results', [QcmController::class, 'myResults'])->name('student.results')->middleware('auth');
+
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+   Route::get('/resultats', [QcmController::class, 'index'])->name('resultats.index');
+   Route::get('/settings', [QcmController::class, 'index'])->name('settings.index');
+
 
 });
 

@@ -10,7 +10,7 @@ use App\Models\Qcm;
 use App\Models\Question;
 use App\Models\Resultat;
 
-class DashboardController extends Controller
+class DashboardController 
 {
     public function welcome()
     {

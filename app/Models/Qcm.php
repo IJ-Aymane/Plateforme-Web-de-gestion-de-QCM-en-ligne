@@ -28,4 +28,8 @@ class Qcm extends Model
     {
         return $this->belongsTo(User::class, 'enseignant_id');
     }
+     public function resultats()
+    {
+        return $this->hasMany(Resultat::class, 'qcm_id');
+    }
 }

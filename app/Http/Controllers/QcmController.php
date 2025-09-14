@@ -27,7 +27,7 @@ class QcmController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('qcm.index', compact('qcm'));
+        return view('qcm.index', compact('qcms'));
     }
 
     public function create()
@@ -65,7 +65,7 @@ class QcmController extends Controller
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
 
-        return view('qcm.show', compact('qcm'));
+        return view('qcm.show', compact('qcms'));
     }
 
     public function edit($id)

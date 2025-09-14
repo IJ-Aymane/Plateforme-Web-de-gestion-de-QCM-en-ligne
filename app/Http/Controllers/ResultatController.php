@@ -6,7 +6,7 @@ use App\Models\Resultat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ResultatController extends Controller
+class ResultatController
 {
     // Résultats pour enseignants / admin
     public function index()

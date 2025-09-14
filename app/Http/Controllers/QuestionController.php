@@ -7,7 +7,7 @@ use App\Models\Question;
 use App\Models\Qcm;
 use Illuminate\Support\Facades\Auth;
 
-class QuestionController extends Controller
+class QuestionController
 {
     public function index()
     {
