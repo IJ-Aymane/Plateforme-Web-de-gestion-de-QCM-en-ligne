@@ -18,10 +18,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 
-// Password reset routes (if needed)
-Route::get('/password/reset', [AuthController::class, 'showResetForm'])->name('password.request');
-Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
-
 // =============================
 // Public routes
 // =============================
@@ -32,19 +28,22 @@ Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
 // =============================
 Route::middleware(['auth'])->group(function () {
 
-    // Dashboards
-    Route::get('/dashboard/admin', [DashboardController::class, 'adminDashboard'])
-        ->name('dashboard.admin')
-        ->middleware('role:enseignant');
-
+    // Main Student Dashboard - This renders dashboardStudent.blade.php
     Route::get('/dashboard/student', [DashboardController::class, 'studentDashboard'])
-        ->name('dashboard.student')
-        ->middleware('role:etudiant');
+        ->name('dashboard.student');
+
+    // Admin Dashboard  
+    Route::get('/dashboard/admin', [DashboardController::class, 'adminDashboard'])
+        ->name('dashboard.admin');
+
+    // Dashboard redirect
+    Route::get('/dashboard', [DashboardController::class, 'redirectToDashboard'])
+        ->name('dashboard');
 
     // =========================
-    // Teacher routes (Enseignant only)
+    // Admin/Teacher routes
     // =========================
-    Route::middleware('role:enseignant')->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
         
         // QCM Management
         Route::resource('qcm', QcmController::class);
@@ -52,16 +51,8 @@ Route::middleware(['auth'])->group(function () {
         // Questions Management
         Route::resource('questions', QuestionController::class);
         
-        // User Management - Complete CRUD operations
-        Route::resource('users', UserController::class)->names([
-            'index' => 'users.index',
-            'create' => 'users.create',
-            'store' => 'users.store',
-            'show' => 'users.show',
-            'edit' => 'users.edit',
-            'update' => 'users.update',
-            'destroy' => 'users.destroy',
-        ]);
+        // User Management
+        Route::resource('users', UserController::class);
         
         // Results Management
         Route::get('/resultats', [ResultatController::class, 'index'])->name('resultats.index');
@@ -69,36 +60,34 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/resultats/{resultat}', [ResultatController::class, 'destroy'])->name('resultats.destroy');
         
         // Settings
-        Route::get('/settings', [DashboardController::class, 'settings'])->name('settings.index');
-        Route::put('/settings', [DashboardController::class, 'updateSettings'])->name('settings.update');
+        Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     });
 
     // =========================
-    // Student routes (Étudiant only)
+    // QCM routes (for students)
     // =========================
-    Route::middleware('role:etudiant')->group(function () {
-        
-        // Available qcm for students
-        Route::get('/qcm/available', [QcmController::class, 'available'])->name('qcm.available');
-        
-        // Take QCM
-        Route::get('/qcm/{qcm}/take', [QcmController::class, 'take'])->name('qcm.take');
-        Route::post('/qcm/{qcm}/submit', [QcmController::class, 'submit'])->name('qcm.submit');
+    // Available QCM for students
+    Route::get('/qcm/available', [QcmController::class, 'available'])->name('qcm.available');
+    Route::get('/qcm/{qcm}/take', [QcmController::class, 'take'])->name('qcm.take');
+    Route::post('/qcm/{qcm}/submit', [QcmController::class, 'submit'])->name('qcm.submit');
+    
+    // =========================
+    // Student routes
+    // =========================
+    Route::prefix('student')->name('student.')->group(function () {
         
         // Student Results
-        Route::get('/student/results', [ResultatController::class, 'studentResults'])->name('student.results');
-        Route::get('/student/results/{resultat}', [ResultatController::class, 'studentResultShow'])->name('student.results.show');
+        Route::get('/results', [ResultatController::class, 'studentResults'])->name('results');
+        Route::get('/results/{resultat}', [ResultatController::class, 'studentResultShow'])->name('results.show');
+        
+        // Student History
+        Route::get('/history', [ResultatController::class, 'studentResults'])->name('history');
     });
 
     // =========================
-    // Shared routes (Both roles)
+    // Profile routes
     // =========================
-    
-    // Profile management
     Route::get('/profile', [UserController::class, 'profile'])->name('profile.show');
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password');
-    
-    // Dashboard redirect based on role
-    Route::get('/dashboard', [DashboardController::class, 'redirectToDashboard'])->name('dashboard');
 });

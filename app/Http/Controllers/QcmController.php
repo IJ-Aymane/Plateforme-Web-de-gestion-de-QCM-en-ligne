@@ -22,7 +22,7 @@ class QcmController extends Controller
                    ->latest()
                    ->paginate(10);
 
-        return view('qcm.index', compact('qcm')); // View path: resources/views/qcm/index.blade.php
+        return view('qcm.index', compact('qcm'));
     }
 
     public function create()
@@ -52,10 +52,12 @@ class QcmController extends Controller
         return redirect()->route('qcm.index')->with('success', 'QCM créé avec succès.');
     }
 
-  
-    public function show(Qcm $qcm)
+    // Fixed method signature to avoid conflict with parent Controller
+    public function show(string $id)
     {
+        $qcm = Qcm::findOrFail($id);
         $user = Auth::user();
+        
         if ($user->role !== 'enseignant' || $qcm->enseignant_id !== $user->id) {
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
@@ -64,9 +66,11 @@ class QcmController extends Controller
     }
 
    
-    public function edit(Qcm $qcm)
+    public function edit(string $id)
     {
+        $qcm = Qcm::findOrFail($id);
         $user = Auth::user();
+        
         if ($user->role !== 'enseignant' || $qcm->enseignant_id !== $user->id) {
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
@@ -75,9 +79,11 @@ class QcmController extends Controller
     }
 
     
-    public function update(Request $request, Qcm $qcm)
+    public function update(Request $request, string $id)
     {
+        $qcm = Qcm::findOrFail($id);
         $user = Auth::user();
+        
         if ($user->role !== 'enseignant' || $qcm->enseignant_id !== $user->id) {
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
@@ -96,9 +102,11 @@ class QcmController extends Controller
     }
 
     
-    public function destroy(Qcm $qcm)
+    public function destroy(string $id)
     {
+        $qcm = Qcm::findOrFail($id);
         $user = Auth::user();
+        
         if ($user->role !== 'enseignant' || $qcm->enseignant_id !== $user->id) {
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
@@ -106,5 +114,30 @@ class QcmController extends Controller
         $qcm->delete();
 
         return redirect()->route('qcm.index')->with('success', 'QCM supprimé avec succès.');
+    }
+
+    // Method for students to view available QCMs
+    public function available()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'etudiant') {
+            return redirect()->route('welcome')->with('error', 'Accès refusé.');
+        }
+
+        $qcms = Qcm::with('enseignant')->latest()->paginate(10);
+        return view('qcm.available', compact('qcms'));
+    }
+
+    // Method for students to take a QCM
+    public function take(string $id)
+    {
+        $qcm = Qcm::with('questions.options')->findOrFail($id);
+        $user = Auth::user();
+        
+        if ($user->role !== 'etudiant') {
+            return redirect()->route('welcome')->with('error', 'Accès refusé.');
+        }
+
+        return view('qcm.take', compact('qcm'));
     }
 }

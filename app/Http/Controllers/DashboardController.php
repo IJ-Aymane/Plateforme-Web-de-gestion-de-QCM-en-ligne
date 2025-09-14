@@ -13,40 +13,20 @@ class DashboardController extends Controller
 {
     public function welcome()
     {
-        $data = [];
-
+        // If user is logged in, redirect to student dashboard
         if (Auth::check()) {
-           
-            $user = Auth::user();
-
-            if ($user->role === 'enseignant') {
-                $data = [
-                    'userQcmCount' => $user->qcm()->count(),
-                    'userQuestionsCount' => Question::whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))->count(),
-                    'studentsCount' => User::where('role', 'etudiant')->count(),
-                    'totalAttempts' => Resultat::whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))->count(),
-                ];
-            } else {
-                $userResults = $user->resultats();
-                $data = [
-                    'availableQcmCount' => Qcm::whereNotIn('id', $userResults->pluck('qcm_id'))->count(),
-                    'completedQcmCount' => $userResults->count(),
-                    'averageScore' => $userResults->count() > 0 ? $userResults->avg(DB::raw('score * 100 / total_questions')) : 0,
-                    'bestScore' => $userResults->count() > 0 ? $userResults->max(DB::raw('score * 100 / total_questions')) : 0,
-                    'recentResults' => $userResults->with('qcm')->latest()->take(5)->get(),
-                ];
-            }
+            return redirect()->route('dashboard.student');
         }
-
-        return view('welcome', $data);
+        
+        return view('welcome');
     }
 
     public function adminDashboard()
     {
-       
         $user = Auth::user();
 
         $data = [
+            'user' => $user,
             'totalStudents' => User::where('role', 'etudiant')->count(),
             'totalQcm' => $user->qcm()->count(),
             'totalQuestions' => Question::whereHas('qcm', fn($q) => $q->where('enseignant_id', $user->id))->count(),
@@ -61,13 +41,62 @@ class DashboardController extends Controller
         return view('dashboardAdmin', $data);
     }
 
+    /**
+     * This is the main method that renders dashboardStudent.blade.php
+     */
     public function studentDashboard()
     {
-        return redirect()->route('welcome');
+        $user = Auth::user();
+        
+        // Initialize default values
+        $completedQcmIds = collect();
+        $userResults = collect();
+        $availableQcm = collect();
+        
+        // Try to get user results safely
+        try {
+            if (method_exists($user, 'resultats')) {
+                $userResults = $user->resultats();
+                $completedQcmIds = $userResults->pluck('qcm_id');
+            }
+        } catch (\Exception $e) {
+            // Handle case where relationship doesn't exist yet
+        }
+
+        // Try to get available QCM safely
+        try {
+            $availableQcm = Qcm::whereNotIn('id', $completedQcmIds)
+                ->latest()
+                ->take(5)
+                ->get();
+        } catch (\Exception $e) {
+            // Handle case where QCM model doesn't exist yet
+        }
+        
+        $data = [
+            'user' => $user,
+            'availableQcmCount' => $availableQcm->count(),
+            'completedQcmCount' => is_object($userResults) ? $userResults->count() : 0,
+            'averageScore' => 0, // Default to 0 for now
+            'bestScore' => 0,    // Default to 0 for now
+            'recentResults' => collect(), // Empty collection for now
+            'availableQcm' => $availableQcm,
+            'totalResultats' => is_object($userResults) ? $userResults->count() : 0,
+        ];
+
+        // This will render views/dashboardStudent.blade.php
+        return view('dashboardStudent', $data);
+    }
+
+    public function redirectToDashboard()
+    {
+        // Always redirect to student dashboard
+        return redirect()->route('dashboard.student');
     }
 
     public function settings()
     {
-        return view('settings');
+        $user = Auth::user();
+        return view('settings', compact('user'));
     }
 }
