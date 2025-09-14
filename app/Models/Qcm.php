@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Qcm extends Model
 {
-    protected $table = 'qcm';
     use HasFactory;
+
+    protected $table = 'qcm';
 
     protected $fillable = [
         'titre',
@@ -16,20 +17,15 @@ class Qcm extends Model
         'enseignant_id',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-
+    // Relation vers les questions
     public function questions()
     {
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Question::class, 'qcm_id');
     }
 
-
-    public function resultats()
+    // Relation vers l'enseignant (User)
+    public function enseignant()
     {
-        return $this->hasMany(Resultat::class);
+        return $this->belongsTo(User::class, 'enseignant_id');
     }
 }

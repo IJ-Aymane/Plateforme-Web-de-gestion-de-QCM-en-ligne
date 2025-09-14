@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    /**
+     * Display the login view.
+     */
+    public function showLogin(): View
     {
         return view('login');
     }
 
-    public function login(Request $request)
+    /**
+     * Handle an authentication attempt.
+     */
+    public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -23,40 +31,49 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            $user = Auth::user();
-
-            return $user->role === 'enseignant'
-                ? redirect()->route('dashboard.admin')
-                : redirect()->route('welcome');
+            
+            // Always redirect to dashboardStudent.blade.php
+            return redirect()->route('dashboard.student');
         }
 
         return back()->withErrors([
             'email' => 'Identifiants incorrects.',
-        ]);
+        ])->onlyInput('email');
     }
 
-    public function logout(Request $request)
+    /**
+     * Log the user out of the application.
+     */
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('success', 'Déconnexion réussie.');
+
+        return redirect()->route('login')->with('success', 'Déconnexion réussie.');
     }
 
-    public function showRegister(Request $request)
+    /**
+     * Display the registration view.
+     */
+    public function showRegister(Request $request): View
     {
         $role = $request->get('role', 'etudiant');
         return view('register', compact('role'));
     }
 
-    public function register(Request $request)
+    /**
+     * Handle a registration request.
+     */
+    public function register(Request $request): RedirectResponse
     {
         $request->validate([
-            'nom' => 'required|string|max:100',
-            'prenom' => 'required|string|max:100',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:enseignant,etudiant',
+            'nom' => ['required', 'string', 'max:100'],
+            'prenom' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required', 'in:enseignant,etudiant'],
         ]);
 
         $user = User::create([
@@ -68,9 +85,8 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-
-        return $user->role === 'enseignant'
-            ? redirect()->route('dashboard.admin')->with('success', 'Compte enseignant créé.')
-            : redirect()->route('welcome')->with('success', 'Compte étudiant créé.');
+        
+        // Always redirect to dashboardStudent.blade.php after registration
+        return redirect()->route('dashboard.student')->with('success', 'Compte créé avec succès.');
     }
 }
