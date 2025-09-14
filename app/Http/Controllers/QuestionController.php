@@ -39,7 +39,7 @@ class QuestionController
         }
 
         $request->validate([
-            'qcm_id' => 'required|exists:qcms,id',
+            'qcm_id' => 'required|exists:qcm,id',
             'intitule' => 'required|string|max:255',
             'choix' => 'required|array|min:2',
             'choix.*' => 'required|string|max:255',
@@ -86,7 +86,7 @@ class QuestionController
         }
 
         $request->validate([
-            'qcm_id' => 'required|exists:qcms,id',
+            'qcm_id' => 'required|exists:qcm,id',
             'intitule' => 'required|string|max:255',
             'choix' => 'required|array|min:2',
             'choix.*' => 'required|string|max:255',
