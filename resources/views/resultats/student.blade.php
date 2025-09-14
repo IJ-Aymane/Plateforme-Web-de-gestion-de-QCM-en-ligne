@@ -13,13 +13,49 @@
     </header>
 
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        @if ($resultats->isEmpty())
-            <div class="text-center py-16 px-6">
-                <i class="fas fa-inbox text-5xl text-gray-400 mb-4"></i>
-                <h3 class="text-xl font-semibold text-gray-700">Aucun résultat à afficher</h3>
-                <p class="text-gray-500 mt-2">Vous n'avez pas encore terminé de QCM. Consultez les <a href="{{ route('qcm.available') }}" class="text-blue-600 hover:underline font-medium">QCM disponibles</a> pour commencer.</p>
+
+
+        @if(isset($qcm))
+            <div class="p-8 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ $qcm->titre }}</h2>
+                <p class="text-gray-600">Score : <span class="font-bold text-2xl text-blue-600">{{ $score }} / {{ count($qcm->questions) }}</span></p>
             </div>
-        @else
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-600">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b-2 border-gray-200">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 font-semibold">Question</th>
+                            <th scope="col" class="px-6 py-4 font-semibold">Votre réponse</th>
+                            <th scope="col" class="px-6 py-4 font-semibold">Bonne réponse</th>
+                            <th scope="col" class="px-6 py-4 font-semibold">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach($results as $result)
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 font-medium text-gray-900">{{ $result['question_text'] }}</td>
+                                <td class="px-6 py-4">{{ $result['user_answer_text'] }}</td>
+                                <td class="px-6 py-4">{{ $result['correct_answer_text'] }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                                        {{ $result['is_correct'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $result['is_correct'] ? '✓ Correct' : '✗ Incorrect' }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-6 bg-gray-50 border-t border-gray-200 text-center">
+                <a href="{{ route('qcm.available') }}" class="text-blue-600 hover:underline font-medium">
+                    ← Retour aux QCM disponibles
+                </a>
+            </div>
+
+        @elseif(isset($resultats) && $resultats->isNotEmpty())
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-600">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b-2 border-gray-200">
@@ -58,13 +94,25 @@
                     </tbody>
                 </table>
             </div>
-            
-            {{-- This check now verifies that $resultats is a Paginator instance --}}
+
             @if ($resultats instanceof \Illuminate\Pagination\AbstractPaginator && $resultats->hasPages())
                 <div class="p-4 border-t border-gray-200">
                     {{ $resultats->links() }}
                 </div>
             @endif
+
+
+        @else
+            <div class="text-center py-16 px-6">
+                <i class="fas fa-inbox text-5xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-700">Aucun résultat à afficher</h3>
+                <p class="text-gray-500 mt-2">
+                    Vous n'avez pas encore terminé de QCM.
+                    <a href="{{ route('qcm.available') }}" class="text-blue-600 hover:underline font-medium">
+                        Consultez les QCM disponibles
+                    </a> pour commencer.
+                </p>
+            </div>
         @endif
     </div>
 </div>
