@@ -16,10 +16,9 @@ class Resultat extends Model
         'total_questions',
     ];
 
-    // La ligne suivante est supprimée, car 'answers' n'est plus une colonne
-    // protected $casts = ['answers' => 'array',];
+   
 
-    public function user()
+    public function etudiant()
     {
         return $this->belongsTo(User::class, 'etudiant_id');
     }
