@@ -16,7 +16,7 @@
         </div>
 
         <div class="p-6">
-            @if($qcms->count() > 0)
+            @if($qcm->count() > 0)
                 <div class="overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -28,39 +28,39 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($qcms as $qcm)
+                                @foreach($qcm as $qc)
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ $qcm->titre }}
+                                                {{ $qc->titre }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="text-sm text-gray-600 max-w-xs truncate">
-                                                {{ Str::limit($qcm->description, 50) ?: 'Aucune description' }}
+                                                {{ Str::limit($qc->description, 50) ?: 'Aucune description' }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                {{ $qcm->questions->count() ?? 0 }} questions
+                                                {{ $qc->questions->count() ?? 0 }} questions
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $qcm->created_at->format('d/m/Y H:i') }}
+                                            {{ $qc->created_at->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-2">
-                                                <a href="{{ route('admin.qcm.show', $qcm->id) }}" 
+                                                <a href="{{ route('admin.qcm.show', $qc->id) }}" 
                                                    class="inline-flex items-center px-3 py-1 border border-blue-300 rounded-md text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100">
                                                     <i class="fas fa-eye mr-1"></i>
                                                     Voir
                                                 </a>
-                                                <a href="{{ route('admin.qcm.edit', $qcm->id) }}" 
+                                                <a href="{{ route('admin.qcm.edit', $qc->id) }}" 
                                                    class="inline-flex items-center px-3 py-1 border border-yellow-300 rounded-md text-xs font-medium text-yellow-700 bg-yellow-50 hover:bg-yellow-100">
                                                     <i class="fas fa-edit mr-1"></i>
                                                     Modifier
                                                 </a>
-                                                <form method="POST" action="{{ route('admin.qcm.destroy', $qcm->id) }}" 
+                                                <form method="POST" action="{{ route('admin.qcm.destroy', $qc->id) }}" 
                                                       class="inline-block"
                                                       onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce QCM ? Cette action est irréversible.')">
                                                     @csrf
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="mt-6 flex justify-center">
-                    {{ $qcms->links() }}
+                    {{ $qcm->links() }}
                 </div>
             @else
                 <div class="text-center py-16">

@@ -86,7 +86,10 @@ class AuthController
 
         Auth::login($user);
         
-        // Always redirect to dashboardStudent.blade.php after registration
-        return redirect()->route('dashboard.student')->with('success', 'Compte créé avec succès.');
+       
+        return 
+        
+        redirect()->route('dashboard.student')->with('success', 'Compte créé avec succès.');
+
     }
 }

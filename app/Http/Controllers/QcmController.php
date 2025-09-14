@@ -27,7 +27,7 @@ class QcmController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('qcm.index', compact('qcms'));
+        return view('qcm.index', compact('qcm'));
     }
 
     public function create()
@@ -65,7 +65,7 @@ class QcmController extends Controller
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
 
-        return view('qcm.show', compact('qcms'));
+        return view('qcm.show', compact('qcm'));
     }
 
     public function edit($id)
@@ -127,7 +127,7 @@ class QcmController extends Controller
         }
 
         $qcms = Qcm::with('enseignant')->latest()->paginate(10);
-        return view('qcm.available', compact('qcms'));
+        return view('qcm.available', compact('qcm'));
     }
 
     /**
