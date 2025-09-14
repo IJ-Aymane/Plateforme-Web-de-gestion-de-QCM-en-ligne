@@ -23,9 +23,9 @@
             <label for="qcm_id" class="form-label">QCM associé</label>
             <select name="qcm_id" id="qcm_id" class="form-select" required>
                 <option value="">-- Choisir un QCM --</option>
-                @foreach($qcms as $qcm)
-                    <option value="{{ $qcm->id }}" {{ (old('qcm_id') == $qcm->id) ? 'selected' : '' }}>
-                        {{ $qcm->titre }}
+                @foreach($qcm as $qc)
+                    <option value="{{ $qc->id }}" {{ (old('qc_id') == $qc->id) ? 'selected' : '' }}>
+                        {{ $qc->titre }}
                     </option>
                 @endforeach
             </select>
