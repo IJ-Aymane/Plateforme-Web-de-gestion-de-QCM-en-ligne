@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\Reponse;
 use App\Models\Qcm;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class QuestionController
+class QuestionController extends Controller
 {
     public function index()
     {
@@ -16,7 +18,7 @@ class QuestionController
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
 
-        $questions = Question::with('qcm')->latest()->paginate(10);
+        $questions = Question::with(['qcm', 'reponses'])->latest()->paginate(10);
         return view('questions.index', compact('questions'));
     }
 
@@ -41,80 +43,224 @@ class QuestionController
         $request->validate([
             'qcm_id' => 'required|exists:qcm,id',
             'intitule' => 'required|string|max:255',
+            'question' => 'nullable|string|max:1000',
             'choix' => 'required|array|min:2',
             'choix.*' => 'required|string|max:255',
             'reponse_correcte' => 'required|string',
         ]);
 
-        // Vérifier que la réponse est dans les choix
-        if (!in_array($request->reponse_correcte, $request->choix)) {
+        // Filtrer les choix vides
+        $choixFiltres = array_values(array_filter($request->choix, function($choix) {
+            return !empty(trim($choix));
+        }));
+
+        // Vérifier que la réponse correcte est dans les choix
+        if (!in_array($request->reponse_correcte, $choixFiltres)) {
             return back()->withErrors(['reponse_correcte' => 'La réponse correcte doit être parmi les choix.'])->withInput();
         }
 
-        Question::create([
-            'qcm_id' => $request->qcm_id,
-            'intitule' => $request->intitule,
-            'choix' => $request->choix, // auto-cast JSON
-            'reponse_correcte' => $request->reponse_correcte,
-        ]);
+        DB::beginTransaction();
+        
+        try {
+            // Combiner intitulé et question pour le champ question de la DB
+            $questionComplete = $request->intitule;
+            if (!empty($request->question)) {
+                $questionComplete .= "\n\n" . $request->question;
+            }
 
-        return redirect()->route('questions.index')->with('success', 'Question créée avec succès.');
+            // Créer la question
+            $question = Question::create([
+                'qcm_id' => $request->qcm_id,
+                'question' => $questionComplete,
+            ]);
+
+            // Créer les réponses
+            foreach ($choixFiltres as $choix) {
+                Reponse::create([
+                    'question_id' => $question->id,
+                    'reponse' => $choix,
+                    'is_correct' => $choix === $request->reponse_correcte,
+                ]);
+            }
+
+            DB::commit();
+            
+            return redirect()->route('questions.index')->with('success', 'Question créée avec succès.');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->withErrors(['error' => 'Erreur lors de la création de la question.'])->withInput();
+        }
     }
 
-    public function show(Question $question)
+    public function show($id)
     {
-        $question->load('qcm');
+        $question = Question::with(['qcm', 'reponses'])->findOrFail($id);
         return view('questions.show', compact('question'));
     }
 
-    public function edit(Question $question)
+    public function edit($id)
     {
         $user = Auth::user();
         if ($user->role !== 'enseignant') {
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
 
+        $question = Question::with('reponses')->findOrFail($id);
         $qcm = Qcm::where('enseignant_id', $user->id)->get();
+        
+        // Séparer l'intitulé et la description pour l'édition
+        $questionParts = explode("\n\n", $question->question, 2);
+        $question->intitule = $questionParts[0];
+        $question->description = isset($questionParts[1]) ? $questionParts[1] : '';
+        
+        // Préparer les choix pour le formulaire
+        $question->choix = $question->reponses->pluck('reponse')->toArray();
+        $question->reponse_correcte = $question->reponses->where('is_correct', true)->first()->reponse ?? '';
+        
         return view('questions.edit', compact('question', 'qcm'));
     }
 
-    public function update(Request $request, Question $question)
+    public function update(Request $request, $id)
     {
         $user = Auth::user();
         if ($user->role !== 'enseignant') {
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
+
+        $question = Question::findOrFail($id);
 
         $request->validate([
             'qcm_id' => 'required|exists:qcm,id',
             'intitule' => 'required|string|max:255',
+            'question' => 'nullable|string|max:1000',
             'choix' => 'required|array|min:2',
             'choix.*' => 'required|string|max:255',
             'reponse_correcte' => 'required|string',
         ]);
 
-        if (!in_array($request->reponse_correcte, $request->choix)) {
+        // Filtrer les choix vides
+        $choixFiltres = array_values(array_filter($request->choix, function($choix) {
+            return !empty(trim($choix));
+        }));
+
+        // Vérifier que la réponse correcte est dans les choix
+        if (!in_array($request->reponse_correcte, $choixFiltres)) {
             return back()->withErrors(['reponse_correcte' => 'La réponse correcte doit être parmi les choix.'])->withInput();
         }
 
-        $question->update([
-            'qcm_id' => $request->qcm_id,
-            'intitule' => $request->intitule,
-            'choix' => $request->choix,
-            'reponse_correcte' => $request->reponse_correcte,
-        ]);
+        DB::beginTransaction();
+        
+        try {
+            // Combiner intitulé et question
+            $questionComplete = $request->intitule;
+            if (!empty($request->question)) {
+                $questionComplete .= "\n\n" . $request->question;
+            }
 
-        return redirect()->route('questions.index')->with('success', 'Question mise à jour avec succès.');
+            // Mettre à jour la question
+            $question->update([
+                'qcm_id' => $request->qcm_id,
+                'question' => $questionComplete,
+            ]);
+
+            // Supprimer les anciennes réponses
+            $question->reponses()->delete();
+
+            // Créer les nouvelles réponses
+            foreach ($choixFiltres as $choix) {
+                Reponse::create([
+                    'question_id' => $question->id,
+                    'reponse' => $choix,
+                    'is_correct' => $choix === $request->reponse_correcte,
+                ]);
+            }
+
+            DB::commit();
+            
+            return redirect()->route('questions.index')->with('success', 'Question mise à jour avec succès.');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->withErrors(['error' => 'Erreur lors de la mise à jour de la question.'])->withInput();
+        }
     }
 
-    public function destroy(Question $question)
+    public function destroy($id)
     {
         $user = Auth::user();
         if ($user->role !== 'enseignant') {
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
 
+        $question = Question::findOrFail($id);
+
+        // Les réponses seront supprimées automatiquement grâce à onDelete('cascade')
         $question->delete();
+        
         return redirect()->route('questions.index')->with('success', 'Question supprimée.');
+    }
+
+    /**
+     * Méthode utilitaire pour obtenir les statistiques d'une question
+     */
+    public function getStats($id)
+    {
+        $question = Question::with('reponses')->findOrFail($id);
+        
+        return response()->json([
+            'question_id' => $question->id,
+            'total_reponses' => $question->reponses->count(),
+            'reponse_correcte' => $question->reponses->where('is_correct', true)->first()->reponse ?? null,
+            'reponses' => $question->reponses->map(function($reponse) {
+                return [
+                    'id' => $reponse->id,
+                    'texte' => $reponse->reponse,
+                    'is_correct' => $reponse->is_correct
+                ];
+            })
+        ]);
+    }
+
+    /**
+     * Méthode pour dupliquer une question
+     */
+    public function duplicate($id)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'enseignant') {
+            return redirect()->route('welcome')->with('error', 'Accès refusé.');
+        }
+
+        $originalQuestion = Question::with('reponses')->findOrFail($id);
+        
+        DB::beginTransaction();
+        
+        try {
+            // Créer la nouvelle question
+            $newQuestion = Question::create([
+                'qcm_id' => $originalQuestion->qcm_id,
+                'question' => $originalQuestion->question . ' (Copie)',
+            ]);
+
+            // Dupliquer les réponses
+            foreach ($originalQuestion->reponses as $reponse) {
+                Reponse::create([
+                    'question_id' => $newQuestion->id,
+                    'reponse' => $reponse->reponse,
+                    'is_correct' => $reponse->is_correct,
+                ]);
+            }
+
+            DB::commit();
+            
+            return redirect()->route('questions.edit', $newQuestion->id)
+                           ->with('success', 'Question dupliquée avec succès. Vous pouvez maintenant la modifier.');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('questions.index')
+                           ->with('error', 'Erreur lors de la duplication de la question.');
+        }
     }
 }

@@ -11,7 +11,7 @@ class Question extends Model
 
     protected $fillable = [
         'qcm_id',
-        'question', 
+        'question',
     ];
 
     // Relation vers le QCM
@@ -20,9 +20,21 @@ class Question extends Model
         return $this->belongsTo(Qcm::class, 'qcm_id');
     }
 
-    // Relation vers les réponses (alias options)
-    public function options()
+    // Relation vers les réponses
+    public function reponses()
     {
         return $this->hasMany(Reponse::class, 'question_id');
+    }
+
+    // Relation pour obtenir la réponse correcte
+    public function reponseCorrecte()
+    {
+        return $this->hasOne(Reponse::class, 'question_id')->where('is_correct', true);
+    }
+
+    // Alias pour compatibilité
+    public function options()
+    {
+        return $this->reponses();
     }
 }

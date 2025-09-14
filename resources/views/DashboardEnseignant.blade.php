@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Administrateur - Mon Espace QCM</title>
+    <title>dashboard Enseignantistrateur - Mon Espace QCM</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-bg-light text-text font-sans flex">
@@ -15,7 +15,7 @@
         </div>
         
         <nav class="flex-1 px-4 py-4">
-            <a href="{{ route('dashboard.admin') }}" class="flex items-center gap-3 px-4 py-2 text-white bg-primary rounded-lg font-medium">
+            <a href="{{ route('dashboard.Enseignant') }}" class="flex items-center gap-3 px-4 py-2 text-white bg-primary rounded-lg font-medium">
                 <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
                 <span>Tableau de bord</span>
             </a>
@@ -64,7 +64,10 @@
                     <i data-lucide="bell" class="h-6 w-6"></i>
                 </button>
                 <div class="flex items-center gap-3">
-                    <img src="https://i.pravatar.cc/40?u={{ Auth::user()->email }}" alt="Avatar" class="h-10 w-10 rounded-full">
+                    <!-- ✅ Avatar avec initiales "AI" -->
+                    <img src="https://ui-avatars.com/api/?name=Aymane+Ihdj&background=0D8ABC&color=fff&size=40" 
+                         alt="Avatar" 
+                         class="h-10 w-10 rounded-full">
                     <div>
                         <div class="font-semibold">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</div>
                         <div class="text-sm text-text-muted">{{ ucfirst(Auth::user()->role) }}</div>

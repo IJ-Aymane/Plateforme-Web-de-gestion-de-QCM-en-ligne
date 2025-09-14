@@ -6,11 +6,18 @@
 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
+        <!-- Bandeau de bienvenue -->
         <div class="lg:col-span-3 bg-gradient-to-r from-blue-700 to-blue-900 text-white rounded-xl shadow-lg p-6">
             <div class="flex flex-col md:flex-row items-center justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold mb-1">Bonjour, {{ Auth::user()->prenom }} ! 👋</h2>
-                    <p class="opacity-80">Bienvenue dans votre espace étudiant. Gérez vos QCM et suivez vos progrès.</p>
+                <div class="flex items-center space-x-4">
+                    <!-- Avatar avec initiales -->
+                    <div class="h-12 w-12 flex items-center justify-center rounded-full bg-white text-blue-800 font-bold text-lg shadow">
+                        AI
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold mb-1">Bonjour, {{ Auth::user()->prenom }} ! 👋</h2>
+                        <p class="opacity-80">Bienvenue dans votre espace étudiant. Gérez vos QCM et suivez vos progrès.</p>
+                    </div>
                 </div>
                 <div class="mt-4 md:mt-0 text-right text-sm opacity-80">
                     <i class="fas fa-calendar-alt mr-1"></i>
@@ -19,6 +26,7 @@
             </div>
         </div>
 
+        <!-- Statistiques -->
         <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center">
             <div class="bg-blue-100 rounded-full p-4 mb-4">
                 <i class="fas fa-list-alt text-3xl text-blue-600"></i>
@@ -43,6 +51,7 @@
             <p class="text-gray-500 mt-1">Score Moyen</p>
         </div>
 
+        <!-- Actions rapides -->
         <div class="lg:col-span-2 bg-white rounded-xl shadow-md">
             <div class="p-6 border-b border-gray-200">
                 <h5 class="text-lg font-semibold text-gray-800 flex items-center">
@@ -83,6 +92,7 @@
             </div>
         </div>
 
+        <!-- Activité récente -->
         <div class="bg-white rounded-xl shadow-md">
             <div class="p-6 border-b border-gray-200">
                 <h5 class="text-lg font-semibold text-gray-800 flex items-center">
@@ -117,6 +127,7 @@
             </div>
         </div>
 
+        <!-- Questions disponibles -->
         <div class="lg:col-span-3 bg-white rounded-xl shadow-md overflow-hidden">
             <div class="p-6 border-b border-gray-200">
                 <h5 class="text-lg font-semibold text-gray-800 flex items-center">

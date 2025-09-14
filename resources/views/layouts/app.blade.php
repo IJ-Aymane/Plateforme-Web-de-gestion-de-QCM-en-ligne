@@ -44,9 +44,9 @@
                                 <span>Mes Résultats</span>
                             </a>
                         @else
-                            <a href="{{ route('dashboard.admin') }}" class="hover:text-yellow-300 transition-colors flex items-center space-x-1">
+                            <a href="{{ route('dashboard.Enseignant') }}" class="hover:text-yellow-300 transition-colors flex items-center space-x-1">
                                 <i class="fas fa-tachometer-alt"></i>
-                                <span>Dashboard Admin</span>
+                                <span>dashboard Enseignant</span>
                             </a>
                             <a href="{{ route('admin.qcm.index') }}" class="hover:text-yellow-300 transition-colors flex items-center space-x-1">
                                 <i class="fas fa-list"></i>
@@ -111,9 +111,9 @@
                             <span>Mes Résultats</span>
                         </a>
                     @else
-                        <a href="{{ route('dashboard.admin') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-600 flex items-center space-x-2">
+                        <a href="{{ route('dashboard.Enseignant') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-600 flex items-center space-x-2">
                             <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard Admin</span>
+                            <span>dashboard Enseignant</span>
                         </a>
                         <a href="{{ route('admin.qcm.index') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-600 flex items-center space-x-2">
                             <i class="fas fa-list"></i>

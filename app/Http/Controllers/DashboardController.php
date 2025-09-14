@@ -22,7 +22,7 @@ class DashboardController
         return view('welcome');
     }
 
-    public function adminDashboard()
+    public function EnseignantDashboard()
     {
         $user = Auth::user();
 
@@ -39,7 +39,7 @@ class DashboardController
                 ->latest()->take(10)->get(),
         ];
 
-        return view('dashboardAdmin', $data);
+        return view('dashboardEnseignant', $data);
     }
 
     /**

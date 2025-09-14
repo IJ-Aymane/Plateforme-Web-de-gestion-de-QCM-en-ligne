@@ -33,8 +33,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('dashboard.student');
 
     // Admin Dashboard  
-    Route::get('/dashboard/admin', [DashboardController::class, 'adminDashboard'])
-        ->name('dashboard.admin');
+    Route::get('/dashboard/Enseignant', [DashboardController::class, 'EnseignantDashboard'])
+        ->name('dashboard.Enseignant');
 
     // Dashboard redirect
     Route::get('/dashboard', [DashboardController::class, 'redirectToDashboard'])

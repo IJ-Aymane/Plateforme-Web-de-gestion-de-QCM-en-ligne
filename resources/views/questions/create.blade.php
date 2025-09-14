@@ -7,113 +7,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #4e73df;
-            --success-color: #1cc88a;
-            --danger-color: #e74a3b;
-            --warning-color: #f6c23e;
-            --secondary-color: #858796;
-        }
-        
-        body {
-            background-color: #f8f9fc;
-            font-family: 'Nunito', sans-serif;
-        }
-        
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-        }
-        
-        .card-header {
-            background-color: white;
-            border-bottom: 1px solid #e3e6f0;
-            padding: 1.5rem;
-            font-weight: 700;
-            color: #4e73df;
-            border-top-left-radius: 10px !important;
-            border-top-right-radius: 10px !important;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: #5a5c69;
-            margin-bottom: 0.5rem;
-        }
-        
-        .input-group-text {
-            background-color: #eaecf4;
-            border: 1px solid #d1d3e2;
+        .step-number {
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-right: 10px;
         }
         
         .correct-answer-badge {
+            display: none;
             position: absolute;
-            right: 10px;
+            right: 5px;
             top: 50%;
             transform: translateY(-50%);
-            display: none;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-primary:hover {
-            background-color: #3a5fc8;
-            border-color: #3a5fc8;
         }
         
         .validation-hint {
-            font-size: 0.8rem;
-            padding: 0.5rem;
-            border-radius: 0.35rem;
-            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
             display: none;
         }
         
         .answer-container {
-            transition: all 0.3s ease;
-        }
-        
-        .answer-container:hover {
-            transform: translateY(-2px);
-        }
-        
-        .form-control:focus {
-            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-            border-color: #a1b4e8;
-        }
-        
-        .form-select:focus {
-            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-            border-color: #a1b4e8;
-        }
-        
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            font-size: 0.8rem;
-            margin-right: 8px;
-        }
-        
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-        
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
+            position: relative;
         }
     </style>
 </head>
@@ -164,15 +88,15 @@
                                 <h6 class="text-primary mb-3">
                                     <span class="step-number">2</span>Question
                                 </h6>
-                                <label for="intitule" class="form-label">Intitulé de la question</label>
+                                <label for="intitule" class="form-label">Intitulé de la question <span class="text-danger">*</span></label>
                                 <input type="text" name="intitule" id="intitule" class="form-control"
                                        value="{{ old('intitule') }}" 
                                        placeholder="Saisissez l'intitulé de votre question ici..." required>
                                 <div class="validation-hint alert" id="intitule-hint"></div>
                                 
-                                <label for="question" class="form-label mt-3">Texte de la question (optionnel)</label>
+                                <label for="question" class="form-label mt-3">Description supplémentaire <span class="text-muted">(optionnel)</span></label>
                                 <textarea name="question" id="question" class="form-control" rows="3"
-                                          placeholder="Saisissez votre question ici...">{{ old('question') }}</textarea>
+                                          placeholder="Ajoutez des détails ou une description supplémentaire...">{{ old('question') }}</textarea>
                                 <div class="validation-hint alert" id="question-hint"></div>
                             </div>
 
@@ -180,7 +104,7 @@
                                 <h6 class="text-primary mb-3">
                                     <span class="step-number">3</span>Réponses possibles
                                 </h6>
-                                <label class="form-label">Saisissez au moins 2 réponses</label>
+                                <label class="form-label">Saisissez au moins 2 réponses <span class="text-danger">*</span></label>
                                 
                                 <div id="answers-container">
                                     @for($i = 0; $i < 4; $i++)
@@ -206,7 +130,7 @@
                                 <h6 class="text-primary mb-3">
                                     <span class="step-number">4</span>Réponse correcte
                                 </h6>
-                                <label for="reponse_correcte" class="form-label">Sélectionnez la bonne réponse</label>
+                                <label for="reponse_correcte" class="form-label">Sélectionnez la bonne réponse <span class="text-danger">*</span></label>
                                 <select name="reponse_correcte" id="reponse_correcte" class="form-select" required>
                                     <option value="">-- Saisir les réponses ci-dessus d'abord --</option>
                                 </select>
@@ -257,40 +181,45 @@
             const choices = [];
             const seenValues = new Set();
             
+            // Réinitialiser tous les badges
+            choicesInputs.forEach((input, index) => {
+                document.getElementById(`badge-${index}`).style.display = 'none';
+            });
+            
+            // Construire la liste des choix valides
             choicesInputs.forEach((input, index) => {
                 const value = input.value.trim();
-                if (value && !seenValues.has(value)) {
-                    seenValues.add(value);
+                if (value && !seenValues.has(value.toLowerCase())) {
+                    seenValues.add(value.toLowerCase());
                     choices.push({
                         value: value,
                         index: index + 1,
                         originalIndex: index
                     });
-                    
-                    // Masquer le badge de réponse correcte pour toutes les réponses
-                    document.getElementById(`badge-${index}`).style.display = 'none';
                 }
             });
 
+            // Trier par ordre d'apparition
             choices.sort((a, b) => a.originalIndex - b.originalIndex);
 
+            // Ajouter les options au select
             choices.forEach(choice => {
                 const option = document.createElement('option');
                 option.value = choice.value;
                 option.textContent = `Réponse ${choice.index}: ${choice.value}`;
-                
-                if (choice.value === selectedCorrectAnswer) {
-                    option.selected = true;
-                    // Afficher le badge pour la réponse correcte
-                    document.getElementById(`badge-${choice.originalIndex}`).style.display = 'block';
-                }
                 correctAnswerSelect.appendChild(option);
             });
             
-            if (selectedCorrectAnswer && !choices.some(choice => choice.value === selectedCorrectAnswer)) {
-                correctAnswerSelect.value = '';
+            // Rétablir la sélection si elle existe encore
+            if (selectedCorrectAnswer) {
+                const matchingChoice = choices.find(choice => choice.value === selectedCorrectAnswer);
+                if (matchingChoice) {
+                    correctAnswerSelect.value = selectedCorrectAnswer;
+                    document.getElementById(`badge-${matchingChoice.originalIndex}`).style.display = 'block';
+                }
             }
             
+            // Message par défaut si aucun choix
             if (choices.length === 0) {
                 correctAnswerSelect.innerHTML = '<option value="">-- Saisir les réponses ci-dessus d\'abord --</option>';
             }
@@ -298,7 +227,27 @@
             validateForm();
         }
 
+        // Gérer la sélection de la réponse correcte
+        correctAnswerSelect.addEventListener('change', function() {
+            // Masquer tous les badges
+            choicesInputs.forEach((input, index) => {
+                document.getElementById(`badge-${index}`).style.display = 'none';
+            });
+            
+            // Afficher le badge pour la réponse correcte
+            if (this.value) {
+                choicesInputs.forEach((input, index) => {
+                    if (input.value.trim() === this.value) {
+                        document.getElementById(`badge-${index}`).style.display = 'block';
+                    }
+                });
+            }
+            
+            validateForm();
+        });
+
         function validateForm() {
+            // Compter les choix non vides
             const nonEmptyChoices = Array.from(choicesInputs).filter(i => i.value.trim() !== '').length;
             const choiceValues = Array.from(choicesInputs)
                 .map(i => i.value.trim())
@@ -306,30 +255,30 @@
             
             // Validation du QCM
             if (qcmSelect.value !== '') {
-                showValidationHint(qcmHint, true, "QCM sélectionné");
+                showValidationHint(qcmHint, true, "✓ QCM sélectionné");
             } else {
-                showValidationHint(qcmHint, false, "Veuillez sélectionner un QCM");
+                showValidationHint(qcmHint, false, "⚠ Veuillez sélectionner un QCM");
             }
             
             // Validation de l'intitulé (champ requis)
             if (intituleInput.value.trim() !== '') {
-                showValidationHint(intituleHint, true, "Intitulé saisi");
+                showValidationHint(intituleHint, true, "✓ Intitulé saisi");
             } else {
-                showValidationHint(intituleHint, false, "Veuillez saisir un intitulé");
+                showValidationHint(intituleHint, false, "⚠ L'intitulé est requis");
             }
             
             // Validation de la question (optionnelle)
             if (questionInput.value.trim() !== '') {
-                showValidationHint(questionHint, true, "Question saisie");
+                showValidationHint(questionHint, true, "✓ Description supplémentaire ajoutée");
             } else {
-                showValidationHint(questionHint, true, "Question optionnelle non saisie");
+                showValidationHint(questionHint, true, "ℹ Description optionnelle non renseignée");
             }
             
             // Validation des réponses
             if (nonEmptyChoices >= 2) {
-                showValidationHint(answersHint, true, `Nombre de réponses valides : ${nonEmptyChoices}/4`);
+                showValidationHint(answersHint, true, `✓ ${nonEmptyChoices} réponse(s) saisie(s)`);
             } else {
-                showValidationHint(answersHint, false, `Saisissez au moins 2 réponses (actuellement : ${nonEmptyChoices})`);
+                showValidationHint(answersHint, false, `⚠ Au moins 2 réponses requises (${nonEmptyChoices} actuellement)`);
             }
             
             // Validation de la réponse correcte
@@ -337,9 +286,9 @@
                                          choiceValues.includes(correctAnswerSelect.value);
             
             if (isCorrectAnswerValid) {
-                showValidationHint(correctAnswerHint, true, "Réponse correcte sélectionnée");
+                showValidationHint(correctAnswerHint, true, "✓ Réponse correcte sélectionnée");
             } else {
-                showValidationHint(correctAnswerHint, false, "Veuillez sélectionner une réponse correcte valide");
+                showValidationHint(correctAnswerHint, false, "⚠ Veuillez sélectionner une réponse correcte");
             }
             
             // Validation globale du formulaire
@@ -348,14 +297,17 @@
                                 nonEmptyChoices >= 2 &&
                                 isCorrectAnswerValid;
             
+            // État du bouton
             submitButton.disabled = !isFormValid;
             
             if (isFormValid) {
                 submitButton.classList.remove('btn-secondary');
                 submitButton.classList.add('btn-primary');
+                submitButton.innerHTML = '<i class="fas fa-save me-1"></i>Enregistrer la question';
             } else {
                 submitButton.classList.remove('btn-primary');
                 submitButton.classList.add('btn-secondary');
+                submitButton.innerHTML = '<i class="fas fa-save me-1"></i>Formulaire incomplet';
             }
         }
         
@@ -363,17 +315,20 @@
             element.textContent = message;
             element.style.display = 'block';
             
-            if (isValid) {
-                element.classList.remove('alert-danger');
+            // Supprimer les anciennes classes
+            element.classList.remove('alert-danger', 'alert-success', 'alert-info');
+            
+            if (isValid && message.startsWith('✓')) {
                 element.classList.add('alert-success');
+            } else if (isValid && message.startsWith('ℹ')) {
+                element.classList.add('alert-info');
             } else {
-                element.classList.remove('alert-success');
                 element.classList.add('alert-danger');
             }
         }
 
         // Écouteurs d'événements pour les champs principaux
-        [qcmSelect, intituleInput, questionInput, correctAnswerSelect].forEach(element => {
+        [qcmSelect, intituleInput, questionInput].forEach(element => {
             element.addEventListener('change', validateForm);
             element.addEventListener('input', validateForm);
         });
@@ -392,14 +347,44 @@
             input.addEventListener('blur', updateCorrectAnswerOptions);
         });
 
+        // Validation de soumission du formulaire
+        form.addEventListener('submit', function(e) {
+            const nonEmptyChoices = Array.from(choicesInputs).filter(i => i.value.trim() !== '').length;
+            
+            if (nonEmptyChoices < 2) {
+                e.preventDefault();
+                alert('Veuillez saisir au moins 2 réponses.');
+                return false;
+            }
+            
+            if (!correctAnswerSelect.value) {
+                e.preventDefault();
+                alert('Veuillez sélectionner une réponse correcte.');
+                return false;
+            }
+            
+            if (!intituleInput.value.trim()) {
+                e.preventDefault();
+                alert('L\'intitulé de la question est requis.');
+                return false;
+            }
+        });
+
         // Initialisation avec les valeurs old() s'il y en a
-        if ({{ json_encode(old('choix') !== null) }}) {
-            setTimeout(updateCorrectAnswerOptions, 100);
-        } else {
+        setTimeout(() => {
             updateCorrectAnswerOptions();
-        }
+            
+            // Restaurer la sélection de la réponse correcte si elle existe
+            const oldCorrectAnswer = '{{ old("reponse_correcte") }}';
+            if (oldCorrectAnswer) {
+                correctAnswerSelect.value = oldCorrectAnswer;
+                correctAnswerSelect.dispatchEvent(new Event('change'));
+            }
+        }, 100);
+        
+        // Validation initiale
         validateForm();
     });
     </script>
 </body>
-</html>
+</html> 

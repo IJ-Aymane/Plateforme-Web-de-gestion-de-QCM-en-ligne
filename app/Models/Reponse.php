@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,8 +12,8 @@ class Reponse extends Model
 
     protected $fillable = [
         'question_id',
-        'reponse',   // texte de la réponse
-        'correct',   // true/false si c'est la bonne réponse
+        'reponse',
+        'is_correct',
     ];
 
     // Relation vers la question
