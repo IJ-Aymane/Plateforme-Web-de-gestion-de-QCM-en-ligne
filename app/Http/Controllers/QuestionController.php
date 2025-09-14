@@ -46,7 +46,7 @@ class QuestionController
             'reponse_correcte' => 'required|string',
         ]);
 
-        
+        // Vérifier que la réponse est dans les choix
         if (!in_array($request->reponse_correcte, $request->choix)) {
             return back()->withErrors(['reponse_correcte' => 'La réponse correcte doit être parmi les choix.'])->withInput();
         }
@@ -54,7 +54,7 @@ class QuestionController
         Question::create([
             'qcm_id' => $request->qcm_id,
             'intitule' => $request->intitule,
-            'choix' => $request->choix, 
+            'choix' => $request->choix, // auto-cast JSON
             'reponse_correcte' => $request->reponse_correcte,
         ]);
 
