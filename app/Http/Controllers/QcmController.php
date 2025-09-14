@@ -126,7 +126,7 @@ class QcmController extends Controller
             return redirect()->route('welcome')->with('error', 'Accès refusé.');
         }
 
-        $qcms = Qcm::with('enseignant')->latest()->paginate(10);
+        $qcm = Qcm::with('enseignant')->latest()->paginate(10);
         return view('qcm.available', compact('qcm'));
     }
 
