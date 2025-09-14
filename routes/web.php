@@ -90,4 +90,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('profile.show');
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password');
+
+
+
+    // routes/web.php
+    Route::get('/questions/{id}', [App\Http\Controllers\QuestionsController::class, 'show'])
+    ->name('questions.show');
+
+
+    Route::get('/my-results', [QcmController::class, 'myResults'])->name('student.results')->middleware('auth');
+
 });
+
