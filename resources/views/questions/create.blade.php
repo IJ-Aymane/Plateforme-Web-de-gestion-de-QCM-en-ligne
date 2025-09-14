@@ -2,40 +2,44 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header">Créer une nouvelle question</div>
+    <h2 class="mb-4">Créer une nouvelle question</h2>
 
-                <div class="card-body">
-                    <form action="{{ route('questions.store') }}" method="POST">
-                        @csrf
-
-                        <!-- QCM Selection -->
-                        <div class="mb-3">
-                            <label for="qcm_id" class="form-label">Sélectionner un QCM</label>
-                            <select name="qcm_id" id="qcm_id" class="form-select" required>
-                                <option value="">-- Choisir --</option>
-                                @foreach($qcms as $qcm)
-                                    <option value="{{ $qcm->id }}">{{ $qcm->titre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Question Text -->
-                        <div class="mb-3">
-                            <label for="question" class="form-label">Question</label>
-                            <input type="text" name="question" id="question" class="form-control" required>
-                        </div>
-
-                        <!-- Optional: Add choices here -->
-
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        <a href="{{ route('questions.index') }}" class="btn btn-secondary">Annuler</a>
-                    </form>
-                </div>
-            </div>
+    <!-- Affichage des erreurs de validation -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-    </div>
+    @endif
+
+    <form action="{{ route('questions.store') }}" method="POST">
+        @csrf
+
+        <!-- QCM associé -->
+        <div class="mb-3">
+            <label for="qcm_id" class="form-label">QCM associé</label>
+            <select name="qcm_id" id="qcm_id" class="form-select" required>
+                <option value="">-- Choisir un QCM --</option>
+                @foreach($qcms as $qcm)
+                    <option value="{{ $qcm->id }}" {{ (old('qcm_id') == $qcm->id) ? 'selected' : '' }}>
+                        {{ $qcm->titre }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Texte de la question -->
+        <div class="mb-3">
+            <label for="question" class="form-label">Intitulé de la question</label>
+            <input type="text" name="question" id="question" class="form-control" value="{{ old('question') }}" required>
+        </div>
+
+        <!-- Bouton d'enregistrement -->
+        <button type="submit" class="btn btn-primary">Enregistrer la question</button>
+        <a href="{{ route('qcm.index') }}" class="btn btn-secondary">Annuler</a>
+    </form>
 </div>
 @endsection
