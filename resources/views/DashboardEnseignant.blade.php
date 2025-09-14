@@ -23,18 +23,7 @@
                 <i data-lucide="file-text" class="h-5 w-5"></i>
                 <span>Gestion des QCM</span>
             </a>
-            <a href="{{ route('questions.index') }}" class="flex items-center gap-3 px-4 py-2 text-text-muted hover:bg-bg-light rounded-lg transition mt-2">
-                <i data-lucide="database" class="h-5 w-5"></i>
-                <span>Banque de questions</span>
-            </a>
-            <a href="{{ route('users.index') }}" class="flex items-center gap-3 px-4 py-2 text-text-muted hover:bg-bg-light rounded-lg transition mt-2">
-                <i data-lucide="users" class="h-5 w-5"></i>
-                <span>Utilisateurs</span>
-            </a>
-             <a href="{{ route('resultats.index') }}" class="flex items-center gap-3 px-4 py-2 text-text-muted hover:bg-bg-light rounded-lg transition mt-2">
-                <i data-lucide="bar-chart-2" class="h-5 w-5"></i>
-                <span>Résultats & Stats</span>
-            </a>
+
             <a href="{{ route('settings.index') }}" class="flex items-center gap-3 px-4 py-2 text-text-muted hover:bg-bg-light rounded-lg transition mt-2">
                 <i data-lucide="settings" class="h-5 w-5"></i>
                 <span>Paramètres</span>

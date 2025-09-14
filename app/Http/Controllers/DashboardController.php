@@ -19,7 +19,46 @@ class DashboardController
             return redirect()->route('dashboard.student');
         }
         
-        return view('welcome');
+        // Calculate statistics for the welcome page
+        $stats = [
+            'total_qcms' => Qcm::count(),
+            'total_users' => User::where('role', 'etudiant')->count(),
+            'total_questions' => Question::count(),
+            'completion_rate' => $this->calculateCompletionRate(),
+        ];
+        
+        // Get available QCMs for display (limit to 6 for the homepage)
+        $availableQcms = Qcm::with(['enseignant', 'questions'])
+            ->latest()
+            ->take(6)
+            ->get();
+        
+        return view('welcome', compact('stats', 'availableQcms'));
+    }
+
+    /**
+     * Calculate the overall completion/success rate
+     */
+    private function calculateCompletionRate()
+    {
+        try {
+            $totalResults = Resultat::count();
+            if ($totalResults == 0) {
+                return 0;
+            }
+            
+            // Calculate average success rate based on scores
+            $totalScore = Resultat::sum('score');
+            $totalQuestions = Resultat::sum('total_questions');
+            
+            if ($totalQuestions > 0) {
+                return round(($totalScore / $totalQuestions) * 100);
+            }
+            
+            return 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     public function EnseignantDashboard()

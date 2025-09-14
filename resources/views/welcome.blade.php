@@ -268,58 +268,193 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-3 text-2xl font-bold text-blue-400 mb-4">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span>Mon Espace QCM</span>
+<!-- FOOTER MODERNE -->
+<footer class="relative bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
+        <div class="absolute top-10 left-10 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-purple-400/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="relative container mx-auto px-6 py-16">
+        <!-- Main Footer Content -->
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-12">
+            <!-- Brand Section -->
+            <div class="lg:col-span-2">
+                <div class="flex items-center gap-3 text-3xl font-bold text-blue-400 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-graduation-cap text-white"></i>
                     </div>
-                    <p class="text-gray-400 leading-relaxed max-w-md">
-                        Une plateforme moderne et intuitive pour l'évaluation en ligne. 
-                        Développez vos compétences avec nos QCM interactifs et suivez vos progrès en temps réel.
-                    </p>
-                    <div class="flex gap-4 mt-6">
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-300">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-300">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-300">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
+                    <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                        Mon Espace QCM
+                    </span>
+                </div>
+                <p class="text-gray-300 leading-relaxed max-w-lg mb-8 text-lg">
+                    La plateforme d'évaluation en ligne de nouvelle génération. Créez, passez et analysez vos QCM avec des outils modernes et intuitifs.
+                </p>
+                
+                <!-- Stats rapides -->
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    <div class="text-center p-4 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10">
+                        <div class="text-2xl font-bold text-blue-400 mb-1">1000+</div>
+                        <div class="text-sm text-gray-300">QCM Créés</div>
+                    </div>
+                    <div class="text-center p-4 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10">
+                        <div class="text-2xl font-bold text-purple-400 mb-1">500+</div>
+                        <div class="text-sm text-gray-300">Utilisateurs</div>
                     </div>
                 </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-4">Liens Rapides</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#features" class="text-gray-400 hover:text-white transition duration-300">Fonctionnalités</a></li>
-                        <li><a href="#qcms" class="text-gray-400 hover:text-white transition duration-300">QCM Disponibles</a></li>
-                        <li><a href="{{ route('register') }}" class="text-gray-400 hover:text-white transition duration-300">S'inscrire</a></li>
-                        <li><a href="{{ route('login') }}" class="text-gray-400 hover:text-white transition duration-300">Se connecter</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-4">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Centre d'aide</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contact</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQ</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Politique de confidentialité</a></li>
-                    </ul>
+
+                <!-- Social Media -->
+                <div class="flex gap-4">
+                    <a href="#" class="group w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-all duration-300 backdrop-blur-sm border border-white/20">
+                        <i class="fab fa-facebook-f text-lg group-hover:scale-110 transition-transform"></i>
+                    </a>
+                    <a href="#" class="group w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-blue-400 transition-all duration-300 backdrop-blur-sm border border-white/20">
+                        <i class="fab fa-twitter text-lg group-hover:scale-110 transition-transform"></i>
+                    </a>
+                    <a href="#" class="group w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-blue-700 transition-all duration-300 backdrop-blur-sm border border-white/20">
+                        <i class="fab fa-linkedin-in text-lg group-hover:scale-110 transition-transform"></i>
+                    </a>
+                    <a href="#" class="group w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-pink-600 transition-all duration-300 backdrop-blur-sm border border-white/20">
+                        <i class="fab fa-instagram text-lg group-hover:scale-110 transition-transform"></i>
+                    </a>
                 </div>
             </div>
             
-            <div class="border-t border-gray-700 pt-8 text-center text-gray-400">
-                <p>© {{ date('Y') }} Mon Espace QCM - Tous droits réservés. Développé avec ❤️ pour l'éducation.</p>
+            <!-- Navigation Links -->
+            <div>
+                <h4 class="font-bold text-xl mb-6 text-white flex items-center gap-2">
+                    <i class="fas fa-compass text-blue-400"></i>
+                    Navigation
+                </h4>
+                <ul class="space-y-4">
+                    <li>
+                        <a href="#features" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-star text-xs text-blue-400 group-hover:text-yellow-400"></i>
+                            Fonctionnalités
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#qcms" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-list text-xs text-blue-400 group-hover:text-yellow-400"></i>
+                            QCM Disponibles
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-user-plus text-xs text-blue-400 group-hover:text-yellow-400"></i>
+                            Créer un compte
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('login') }}" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-sign-in-alt text-xs text-blue-400 group-hover:text-yellow-400"></i>
+                            Se connecter
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Support & Contact -->
+            <div>
+                <h4 class="font-bold text-xl mb-6 text-white flex items-center gap-2">
+                    <i class="fas fa-headset text-purple-400"></i>
+                    Support
+                </h4>
+                <ul class="space-y-4 mb-8">
+                    <li>
+                        <a href="#" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-question-circle text-xs text-purple-400 group-hover:text-yellow-400"></i>
+                            Centre d'aide
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-envelope text-xs text-purple-400 group-hover:text-yellow-400"></i>
+                            Contact
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-book text-xs text-purple-400 group-hover:text-yellow-400"></i>
+                            Documentation
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="group flex items-center gap-2 text-gray-300 hover:text-white transition duration-300">
+                            <i class="fas fa-shield-alt text-xs text-purple-400 group-hover:text-yellow-400"></i>
+                            Confidentialité
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Newsletter -->
+                <div class="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10">
+                    <h5 class="font-semibold mb-2 text-white">Newsletter</h5>
+                    <p class="text-sm text-gray-300 mb-3">Restez informé des nouveautés</p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="Email" 
+                               class="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-400">
+                        <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-blue-600 hover:to-purple-600 transition duration-300">
+                            <i class="fas fa-paper-plane text-sm"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
+        
+        <!-- Divider -->
+        <div class="border-t border-white/20 mb-8"></div>
+        
+        <!-- Bottom Section -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-gray-300 mb-2">
+                    © {{ date('Y') }} Mon Espace QCM - Tous droits réservés
+                </p>
+                <p class="text-sm text-gray-400">
+                    Développé avec <i class="fas fa-heart text-red-400 mx-1"></i> pour révolutionner l'éducation
+                </p>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="flex gap-3">
+                @if(auth()->check())
+                    <a href="{{ route('student.dashboard') }}" 
+                       class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl hover:from-blue-600 hover:to-purple-600 transition duration-300 font-medium shadow-lg">
+                        <i class="fas fa-tachometer-alt mr-2"></i>
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('register') }}" 
+                       class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl hover:from-blue-600 hover:to-purple-600 transition duration-300 font-medium shadow-lg">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Commencer
+                    </a>
+                @endif
+            </div>
+        </div>
+        
+        <!-- Tech Stack Badge -->
+        <div class="mt-8 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full text-sm text-gray-400 backdrop-blur-sm border border-white/10">
+                <i class="fab fa-laravel text-red-400"></i>
+                <span>Laravel</span>
+                <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
+                <i class="fab fa-html5 text-orange-400"></i>
+                <span>HTML5</span>
+                <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
+                <i class="fab fa-js text-yellow-400"></i>
+                <span>JavaScript</span>
+                <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
+                <i class="fab fa-css3-alt text-blue-400"></i>
+                <span>TailwindCSS</span>
+            </div>
+        </div>
+    </div>
+</footer>
 
     <!-- Success Alert -->
     @if(session('success'))
