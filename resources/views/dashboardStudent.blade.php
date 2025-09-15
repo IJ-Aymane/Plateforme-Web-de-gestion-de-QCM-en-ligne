@@ -6,11 +6,11 @@
 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- Bandeau de bienvenue -->
+      
         <div class="lg:col-span-3 bg-gradient-to-r from-blue-700 to-blue-900 text-white rounded-xl shadow-lg p-6">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <!-- Avatar avec initiales -->
+                 
                     <div class="h-12 w-12 flex items-center justify-center rounded-full bg-white text-blue-800 font-bold text-lg shadow">
                         AI
                     </div>
@@ -126,58 +126,6 @@
                 @endif
             </div>
         </div>
-
-        <!-- Questions disponibles -->
-        <div class="lg:col-span-3 bg-white rounded-xl shadow-md overflow-hidden">
-            <div class="p-6 border-b border-gray-200">
-                <h5 class="text-lg font-semibold text-gray-800 flex items-center">
-                    <i class="fas fa-question-circle text-yellow-500 mr-2"></i>Questions Disponibles
-                </h5>
-            </div>
-            <div>
-                @if(isset($questions) && $questions->count() > 0)
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-600">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">Intitulé</th>
-                                    <th scope="col" class="px-6 py-3">QCM Associé</th>
-                                    <th scope="col" class="px-6 py-3">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($questions as $question)
-                                    <tr class="bg-white border-b hover:bg-gray-50">
-                                        <td class="px-6 py-4 font-medium text-gray-900">
-                                            {{ Str::limit($question->intitule, 70) }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $question->qcm->titre ?? 'Sans QCM' }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <a href="#" class="px-3 py-1.5 bg-cyan-500 text-white text-xs font-semibold rounded-md hover:bg-cyan-600 transition-colors flex items-center w-fit">
-                                                <i class="fas fa-eye mr-1.5"></i> Voir
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @if ($questions->hasPages())
-                        <div class="p-4 border-t border-gray-200">
-                            {{ $questions->links() }}
-                        </div>
-                    @endif
-                @else
-                    <div class="text-center py-10">
-                         <i class="fas fa-question text-gray-300 text-3xl mb-2"></i>
-                        <p class="text-gray-500">Aucune question disponible</p>
-                    </div>
-                @endif
-            </div>
-        </div>
-
     </div>
 </div>
 @endsection
