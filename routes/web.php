@@ -7,6 +7,7 @@ use App\Http\Controllers\QcmController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ResultatController;
+use App\Http\Controllers\AdminController;
 
 // =============================
 // Authentication routes
@@ -32,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/student', [DashboardController::class, 'studentDashboard'])
         ->name('dashboard.student');
 
-    // Admin Dashboard  
+    // Teacher Dashboard  
     Route::get('/dashboard/Enseignant', [DashboardController::class, 'EnseignantDashboard'])
         ->name('dashboard.Enseignant');
 
@@ -41,17 +42,31 @@ Route::middleware(['auth'])->group(function () {
         ->name('dashboard');
 
     // =========================
-    // Admin/Teacher routes
+    // Admin Dashboard Routes
+    // =========================
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    // =========================
+    // Admin routes
     // =========================
     Route::prefix('admin')->name('admin.')->group(function () {
         
-        // QCM Management
-        Route::resource('qcm', QcmController::class);
-        
-        // Questions Management
-        Route::resource('questions', QuestionController::class);
-        
         // User Management
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
+        Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+        Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
+
+        // QCM Management (Admin)
+        Route::get('/qcms', [AdminController::class, 'qcms'])->name('qcms');
+        Route::delete('/qcms/{id}', [AdminController::class, 'destroyQcm'])->name('qcms.destroy');
+
+        // Results Management (Admin)
+        Route::get('/results', [AdminController::class, 'results'])->name('results');
+
+        // Original Admin Resource Routes
+        Route::resource('qcm', QcmController::class);
+        Route::resource('questions', QuestionController::class);
         Route::resource('users', UserController::class);
         
         // Results Management
@@ -64,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // =========================
-    // QCM routes (for students)
+    // QCM routes (for students and teachers)
     // =========================
     // Available QCM for students
     Route::get('/qcms', [QcmController::class, 'index'])->name('qcm.index');
@@ -76,7 +91,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/qcm/{id}/edit', [QcmController::class, 'edit'])->name('qcm.edit');   
     Route::delete('/qcm/{id}', [QcmController::class, 'destroy'])->name('qcm.destroy');
 
+    // Student Results
+    Route::get('/my-results', [QcmController::class, 'myResults'])->name('student.results')->middleware('auth');
 
+    // =========================
+    // Question routes
+    // =========================
     Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
     Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');  
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
@@ -85,7 +105,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
     Route::delete('/questions/{id}', [QuestionController::class, 'destroy'])->name('questions.destroy');
 
-    
     // =========================
     // Student routes
     // =========================
@@ -106,36 +125,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password');
 
-
-
-    // routes/web.php
-    Route::get('/questions/{id}', [App\Http\Controllers\QuestionsController::class, 'show'])
-    ->name('questions.show');
-
-
-    Route::get('/my-results', [QcmController::class, 'myResults'])->name('student.results')->middleware('auth');
-
-
+    // =========================
+    // General routes
+    // =========================
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-   Route::get('/resultats', [QcmController::class, 'index'])->name('resultats.index');
-   Route::get('/settings', [QcmController::class, 'index'])->name('settings.index');
-
-    
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
-  
-    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::get('/admin/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
-    Route::post('/admin/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
-    Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
-
- 
-    Route::get('/admin/qcms', [AdminController::class, 'qcms'])->name('admin.qcms');
-    Route::delete('/admin/qcms/{id}', [AdminController::class, 'destroyQcm'])->name('admin.qcms.destroy');
-
-
-    Route::get('/admin/results', [AdminController::class, 'results'])->name('admin.results');
-
-
+    Route::get('/resultats', [QcmController::class, 'index'])->name('resultats.index');
+    Route::get('/settings', [QcmController::class, 'index'])->name('settings.index');
 });
-
