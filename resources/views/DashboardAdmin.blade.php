@@ -50,14 +50,21 @@
             </div>
         @endif
 
-        @if(session('error'))
+        @if(session('error') || $errors->any())
             <div class="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <i class="fas fa-exclamation-circle text-red-400"></i>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+                        @if(session('error'))
+                            <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+                        @endif
+                        @if($errors->any())
+                            @foreach($errors->all() as $error)
+                                <p class="text-sm font-medium text-red-800">{{ $error }}</p>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>

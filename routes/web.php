@@ -29,50 +29,35 @@ Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
 // =============================
 Route::middleware(['auth'])->group(function () {
 
-    // Main Student Dashboard - This renders dashboardStudent.blade.php
+    // Dashboard routes
     Route::get('/dashboard/student', [DashboardController::class, 'studentDashboard'])
         ->name('dashboard.student');
-
-    // Teacher Dashboard  
     Route::get('/dashboard/Enseignant', [DashboardController::class, 'EnseignantDashboard'])
         ->name('dashboard.Enseignant');
-
-    // Dashboard redirect
     Route::get('/dashboard', [DashboardController::class, 'redirectToDashboard'])
         ->name('dashboard');
 
     // =========================
-    // Admin Dashboard Routes
+    // Admin routes - COMPLETE SET
     // =========================
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
-    // =========================
-    // Admin routes
-    // =========================
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         
-        // User Management
+        // Admin Dashboard
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        
+        // User Management Routes
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
         Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
         Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
-
-        // QCM Management (Admin)
-        Route::get('/qcms', [AdminController::class, 'qcms'])->name('qcms');
-        Route::delete('/qcms/{id}', [AdminController::class, 'destroyQcm'])->name('qcms.destroy');
-
-        // Results Management (Admin)
-        Route::get('/results', [AdminController::class, 'results'])->name('results');
-
-        // Original Admin Resource Routes
-        Route::resource('qcm', QcmController::class);
-        Route::resource('questions', QuestionController::class);
-        Route::resource('users', UserController::class);
         
-        // Results Management
-        Route::get('/resultats', [ResultatController::class, 'index'])->name('resultats.index');
-        Route::get('/resultats/{resultat}', [ResultatController::class, 'show'])->name('resultats.show');
-        Route::delete('/resultats/{resultat}', [ResultatController::class, 'destroy'])->name('resultats.destroy');
+        // QCM Management Routes
+        Route::get('/qcms', [AdminController::class, 'qcms'])->name('qcms');
+        Route::get('/qcm', [AdminController::class, 'qcms'])->name('qcm.index'); // Alternative for compatibility
+        Route::delete('/qcms/{id}', [AdminController::class, 'destroyQcm'])->name('qcms.destroy');
+        
+        // Results Management Routes
+        Route::get('/results', [AdminController::class, 'results'])->name('results');
         
         // Settings
         Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
@@ -81,18 +66,19 @@ Route::middleware(['auth'])->group(function () {
     // =========================
     // QCM routes (for students and teachers)
     // =========================
-    // Available QCM for students
     Route::get('/qcms', [QcmController::class, 'index'])->name('qcm.index');
     Route::get('/qcm/available', [QcmController::class, 'available'])->name('qcm.available');
+    Route::get('/qcm/create', [QcmController::class, 'create'])->name('qcm.create');
+    Route::post('/qcm', [QcmController::class, 'store'])->name('qcm.store');
     Route::get('/qcm/{qcm}/take', [QcmController::class, 'take'])->name('qcm.take');
     Route::post('/qcm/{qcm}/submit', [QcmController::class, 'submit'])->name('qcm.submit');
-    Route::get('/qcm/create', [QcmController::class, 'create'])->name('qcm.create');
     Route::get('/qcm/{id}', [QcmController::class, 'show'])->name('qcm.show');
-    Route::get('/qcm/{id}/edit', [QcmController::class, 'edit'])->name('qcm.edit');   
+    Route::get('/qcm/{id}/edit', [QcmController::class, 'edit'])->name('qcm.edit');
+    Route::put('/qcm/{id}', [QcmController::class, 'update'])->name('qcm.update');
     Route::delete('/qcm/{id}', [QcmController::class, 'destroy'])->name('qcm.destroy');
 
     // Student Results
-    Route::get('/my-results', [QcmController::class, 'myResults'])->name('student.results')->middleware('auth');
+    Route::get('/my-results', [QcmController::class, 'myResults'])->name('student.results');
 
     // =========================
     // Question routes
@@ -109,11 +95,9 @@ Route::middleware(['auth'])->group(function () {
     // Student routes
     // =========================
     Route::prefix('student')->name('student.')->group(function () {
-        
         // Student Results
         Route::get('/results', [ResultatController::class, 'studentResults'])->name('results');
         Route::get('/results/{resultat}', [ResultatController::class, 'studentResultShow'])->name('results.show');
-        
         // Student History
         Route::get('/history', [ResultatController::class, 'studentResults'])->name('history');
     });
@@ -126,9 +110,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password');
 
     // =========================
-    // General routes
+    // General routes (non-admin users)
     // =========================
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/resultats', [QcmController::class, 'index'])->name('resultats.index');
-    Route::get('/settings', [QcmController::class, 'index'])->name('settings.index');
+    Route::get('/resultats', [ResultatController::class, 'index'])->name('resultats.index');
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings.index');
 });

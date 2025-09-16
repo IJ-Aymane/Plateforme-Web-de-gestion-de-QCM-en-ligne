@@ -11,29 +11,38 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
- 
+    /**
+     * Display admin dashboard
+     */
     public function index()
     {
-        return view('admin.dashboard');
+        // Changed from view('admin.dashboard') to view('DashboardAdmin')
+        return view('DashboardAdmin');
     }
 
-  
+    /**
+     * Display all users (except admins)
+     */
     public function users()
     {
-        $users = User::where('role', '!=', 'admin') // Don't show admin users
+        $users = User::where('role', '!=', 'admin')
                     ->orderBy('nom')
                     ->paginate(15);
 
         return view('admin.users.index', compact('users'));
     }
 
-   
+    /**
+     * Show create user form
+     */
     public function createUser()
     {
         return view('admin.users.create');
     }
 
-    
+    /**
+     * Store new user
+     */
     public function storeUser(Request $request)
     {
         $request->validate([
@@ -55,7 +64,9 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('success', 'Utilisateur créé avec succès.');
     }
 
-    
+    /**
+     * Delete user and associated data
+     */
     public function destroyUser($id)
     {
         $user = User::findOrFail($id);
@@ -64,6 +75,7 @@ class AdminController extends Controller
             return back()->withErrors(['error' => 'Impossible de supprimer un administrateur.']);
         }
 
+        // Delete associated QCMs and results
         $user->qcms()->delete();   
         $user->resultats()->delete(); 
 
@@ -72,7 +84,9 @@ class AdminController extends Controller
         return back()->with('success', 'Utilisateur supprimé avec succès.');
     }
 
-   
+    /**
+     * Display all QCMs
+     */
     public function qcms()
     {
         $qcms = Qcm::with('enseignant')
@@ -82,17 +96,27 @@ class AdminController extends Controller
         return view('admin.qcms.index', compact('qcms'));
     }
 
+    /**
+     * Delete QCM and all associated data
+     */
     public function destroyQcm($id)
     {
         $qcm = Qcm::findOrFail($id);
-        $qcm->questions()->with('options')->delete(); // Cascade delete questions and options
-        $qcm->resultats()->delete(); // Delete all results linked to this QCM
+        
+        // Cascade delete questions and options
+        $qcm->questions()->with('options')->delete(); 
+        
+        // Delete all results linked to this QCM
+        $qcm->resultats()->delete(); 
+        
         $qcm->delete();
 
         return back()->with('success', 'QCM supprimé avec succès et tous ses contenus détruits.');
     }
 
-   
+    /**
+     * Display all results
+     */
     public function results()
     {
         $resultats = Resultat::with(['etudiant', 'qcm'])
