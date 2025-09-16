@@ -32,8 +32,14 @@ class AuthController
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             
-            // Always redirect to dashboardStudent.blade.php
-            return redirect()->route('dashboard.student');
+             $user = Auth::user();
+
+        return match ($user->role) {
+            'etudiant' => redirect()->route('dashboard.student'),
+            'enseignant' => redirect()->route('dashboard.Enseignant'),
+            'admin' => redirect()->route('admin.dashboard'),
+            default => redirect()->route('welcome')->with('error', 'Rôle non reconnu.'),
+        };
         }
 
         return back()->withErrors([
@@ -87,9 +93,13 @@ class AuthController
         Auth::login($user);
         
        
-        return 
         
-        redirect()->route('dashboard.student')->with('success', 'Compte créé avec succès.');
+    return match ($user->role) {
+        'etudiant' => redirect()->route('dashboard.student')->with('success', 'Compte créé avec succès.'),
+        'enseignant' => redirect()->route('dashboard.Enseignant')->with('success', 'Compte créé avec succès.'),
+        'enseignant' => redirect()->route('dashboard.Enseignant')->with('success', 'Compte créé avec succès.'),
+        default => redirect()->route('welcome')->with('error', 'Rôle non reconnu.'),
+    };
 
     }
 }

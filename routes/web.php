@@ -120,6 +120,22 @@ Route::middleware(['auth'])->group(function () {
    Route::get('/resultats', [QcmController::class, 'index'])->name('resultats.index');
    Route::get('/settings', [QcmController::class, 'index'])->name('settings.index');
 
+    
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+  
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/admin/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
+    Route::post('/admin/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
+    Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+
+ 
+    Route::get('/admin/qcms', [AdminController::class, 'qcms'])->name('admin.qcms');
+    Route::delete('/admin/qcms/{id}', [AdminController::class, 'destroyQcm'])->name('admin.qcms.destroy');
+
+
+    Route::get('/admin/results', [AdminController::class, 'results'])->name('admin.results');
+
 
 });
 

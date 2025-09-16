@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $role
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  *
- * Relations:
+ * Relations:   
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Qcm> $qcm
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Resultat> $resultats
  *
