@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
         // User Management Routes
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
+        Route::get('/users/edit', [AdminController::class, 'createUser'])->name('users.edit');
         Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
         Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
         
