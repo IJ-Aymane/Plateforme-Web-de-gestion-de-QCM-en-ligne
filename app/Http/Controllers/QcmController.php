@@ -12,9 +12,6 @@ use App\Models\Resultat;
 
 class QcmController extends Controller
 {
-    /**
-     * Liste des QCM (enseignant uniquement)
-     */
     public function index()
     {
         $user = Auth::user();
@@ -116,9 +113,7 @@ class QcmController extends Controller
         return redirect()->route('qcm.index')->with('success', 'QCM supprimé avec succès.');
     }
 
-    /**
-     * Étudiant : voir les QCM disponibles
-     */
+
     public function available()
     {
         $user = Auth::user();
@@ -130,9 +125,7 @@ class QcmController extends Controller
         return view('qcm.available', compact('qcm'));
     }
 
-    /**
-     * Étudiant : passer un QCM
-     */
+    
     public function take($id)
     {
         $qcm = Qcm::with('questions.options')->findOrFail($id);
@@ -145,9 +138,7 @@ class QcmController extends Controller
         return view('qcm.take', compact('qcm'));
     }
 
-    /**
-     * Étudiant : soumettre un QCM
-     */
+
     public function submit(Request $request, $id)
     {
         $qcm = Qcm::with('questions.options')->findOrFail($id);
@@ -189,7 +180,7 @@ class QcmController extends Controller
             ];
         }
 
-        // Sauvegarde le résultat dans la base de données en utilisant 'score'
+       
         Resultat::create([
             'qcm_id' => $qcm->id,
             'etudiant_id' => $user->id,
@@ -197,26 +188,21 @@ class QcmController extends Controller
             'total_questions' => count($qcm->questions),
         ]);
 
-        // Passe les résultats à la vue pour affichage
         return view('resultats.student', compact('qcm', 'results', 'score'));
     }
     public function myResults()
 {
-    // Get the currently authenticated user
     $user = Auth::user();
 
-    // Deny access if the user is not a student
     if ($user->role !== 'etudiant') {
         return redirect()->route('welcome')->with('error', 'Accès refusé.');
     }
 
-    // Fetch all results for the student, with their associated QCM titles
     $resultats = Resultat::where('etudiant_id', $user->id)
                          ->with('qcm')
                          ->latest()
                          ->get();
 
-    // Pass the fetched results to the view
     return view('resultats.student', compact('resultats'));
 }
 }

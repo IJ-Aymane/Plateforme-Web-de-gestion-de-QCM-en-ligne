@@ -49,12 +49,10 @@ class QuestionController extends Controller
             'reponse_correcte' => 'required|string',
         ]);
 
-        // Filtrer les choix vides
         $choixFiltres = array_values(array_filter($request->choix, function($choix) {
             return !empty(trim($choix));
         }));
 
-        // Vérifier que la réponse correcte est dans les choix
         if (!in_array($request->reponse_correcte, $choixFiltres)) {
             return back()->withErrors(['reponse_correcte' => 'La réponse correcte doit être parmi les choix.'])->withInput();
         }
@@ -62,19 +60,16 @@ class QuestionController extends Controller
         DB::beginTransaction();
         
         try {
-            // Combiner intitulé et question pour le champ question de la DB
             $questionComplete = $request->intitule;
             if (!empty($request->question)) {
                 $questionComplete .= "\n\n" . $request->question;
             }
 
-            // Créer la question
             $question = Question::create([
                 'qcm_id' => $request->qcm_id,
                 'question' => $questionComplete,
             ]);
 
-            // Créer les réponses
             foreach ($choixFiltres as $choix) {
                 Reponse::create([
                     'question_id' => $question->id,
@@ -109,12 +104,10 @@ class QuestionController extends Controller
         $question = Question::with('reponses')->findOrFail($id);
         $qcm = Qcm::where('enseignant_id', $user->id)->get();
         
-        // Séparer l'intitulé et la description pour l'édition
         $questionParts = explode("\n\n", $question->question, 2);
         $question->intitule = $questionParts[0];
         $question->description = isset($questionParts[1]) ? $questionParts[1] : '';
         
-        // Préparer les choix pour le formulaire
         $question->choix = $question->reponses->pluck('reponse')->toArray();
         $question->reponse_correcte = $question->reponses->where('is_correct', true)->first()->reponse ?? '';
         
@@ -139,12 +132,10 @@ class QuestionController extends Controller
             'reponse_correcte' => 'required|string',
         ]);
 
-        // Filtrer les choix vides
         $choixFiltres = array_values(array_filter($request->choix, function($choix) {
             return !empty(trim($choix));
         }));
 
-        // Vérifier que la réponse correcte est dans les choix
         if (!in_array($request->reponse_correcte, $choixFiltres)) {
             return back()->withErrors(['reponse_correcte' => 'La réponse correcte doit être parmi les choix.'])->withInput();
         }
@@ -152,22 +143,18 @@ class QuestionController extends Controller
         DB::beginTransaction();
         
         try {
-            // Combiner intitulé et question
             $questionComplete = $request->intitule;
             if (!empty($request->question)) {
                 $questionComplete .= "\n\n" . $request->question;
             }
 
-            // Mettre à jour la question
             $question->update([
                 'qcm_id' => $request->qcm_id,
                 'question' => $questionComplete,
             ]);
 
-            // Supprimer les anciennes réponses
             $question->reponses()->delete();
 
-            // Créer les nouvelles réponses
             foreach ($choixFiltres as $choix) {
                 Reponse::create([
                     'question_id' => $question->id,
@@ -195,15 +182,12 @@ class QuestionController extends Controller
 
         $question = Question::findOrFail($id);
 
-        // Les réponses seront supprimées automatiquement grâce à onDelete('cascade')
         $question->delete();
         
         return redirect()->route('questions.index')->with('success', 'Question supprimée.');
     }
 
-    /**
-     * Méthode utilitaire pour obtenir les statistiques d'une question
-     */
+    
     public function getStats($id)
     {
         $question = Question::with('reponses')->findOrFail($id);
@@ -222,9 +206,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    /**
-     * Méthode pour dupliquer une question
-     */
+    
     public function duplicate($id)
     {
         $user = Auth::user();
@@ -237,13 +219,11 @@ class QuestionController extends Controller
         DB::beginTransaction();
         
         try {
-            // Créer la nouvelle question
             $newQuestion = Question::create([
                 'qcm_id' => $originalQuestion->qcm_id,
                 'question' => $originalQuestion->question . ' (Copie)',
             ]);
 
-            // Dupliquer les réponses
             foreach ($originalQuestion->reponses as $reponse) {
                 Reponse::create([
                     'question_id' => $newQuestion->id,

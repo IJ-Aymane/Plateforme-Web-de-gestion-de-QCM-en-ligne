@@ -11,17 +11,13 @@ use Illuminate\View\View;
 
 class AuthController 
 {
-    /**
-     * Display the login view.
-     */
+    
     public function showLogin(): View
     {
         return view('login');
     }
 
-    /**
-     * Handle an authentication attempt.
-     */
+ 
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
@@ -47,9 +43,7 @@ class AuthController
         ])->onlyInput('email');
     }
 
-    /**
-     * Log the user out of the application.
-     */
+   
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
@@ -60,18 +54,14 @@ class AuthController
         return redirect()->route('login')->with('success', 'Déconnexion réussie.');
     }
 
-    /**
-     * Display the registration view.
-     */
+    
     public function showRegister(Request $request): View
     {
         $role = $request->get('role', 'etudiant');
         return view('register', compact('role'));
     }
 
-    /**
-     * Handle a registration request.
-     */
+    
     public function register(Request $request): RedirectResponse
     {
         $request->validate([

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ResultatController
 {
-    // Résultats pour enseignants / admin
     public function index()
     {
         $user = Auth::user();
@@ -20,7 +19,6 @@ class ResultatController
         return view('resultats.index', compact('resultats'));
     }
 
-    // Résultats pour un étudiant
     public function studentResults()
     {
         $user = Auth::user();
@@ -35,7 +33,6 @@ class ResultatController
         return view('resultats.student', compact('resultats'));
     }
 
-    // Détails d'un résultat spécifique pour un étudiant
     public function studentResultShow($id)
     {
         $user = Auth::user();
@@ -47,7 +44,6 @@ class ResultatController
         return view('resultats.student-show', compact('resultat'));
     }
 
-    // Historique étudiant
     public function studentHistory()
     {
         return $this->studentResults();
