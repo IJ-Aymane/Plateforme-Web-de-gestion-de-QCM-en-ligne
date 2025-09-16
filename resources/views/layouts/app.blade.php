@@ -43,6 +43,9 @@
                                 <i class="fas fa-chart-line"></i>
                                 <span>Mes Résultats</span>
                             </a>
+                        @elseif(Auth::user()->role === 'admin')
+
+
                         @else
                             <a href="{{ route('dashboard.Enseignant') }}" class="hover:text-yellow-300 transition-colors flex items-center space-x-1">
                                 <i class="fas fa-tachometer-alt"></i>

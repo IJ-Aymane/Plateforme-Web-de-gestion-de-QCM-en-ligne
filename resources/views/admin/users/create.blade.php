@@ -1,4 +1,4 @@
-@extends('layouts.app')
+
 
 @section('title', 'Créer un Utilisateur - Administration')
 
