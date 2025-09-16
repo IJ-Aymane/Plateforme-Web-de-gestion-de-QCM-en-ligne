@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
     <div class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-6">
@@ -27,7 +26,6 @@
     </div>
 
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <!-- Success/Error Messages -->
         @if(session('success'))
             <div class="mb-6 bg-green-50 border border-green-200 rounded-md p-4">
                 <div class="flex">
@@ -61,7 +59,6 @@
             </div>
         @endif
 
-        <!-- Statistics -->
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-3 mb-8">
             <div class="bg-white overflow-hidden shadow rounded-lg">
                 <div class="p-5">
@@ -118,7 +115,6 @@
             </div>
         </div>
 
-        <!-- Users Table -->
         <div class="bg-white shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 sm:px-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -156,6 +152,12 @@
                                     <div class="text-sm text-gray-500">
                                         {{ $user->created_at->format('d/m/Y') }}
                                     </div>
+                                    
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="text-blue-600 hover:text-blue-900 text-sm font-medium">
+                                        <i class="fas fa-edit mr-1"></i>
+                                        Modifier
+                                    </a>
+
                                     <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action supprimera également tous ses QCMs et résultats.')">
                                         @csrf
                                         @method('DELETE')
@@ -170,7 +172,6 @@
                     @endforeach
                 </ul>
 
-                <!-- Pagination -->
                 <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
                     {{ $users->links() }}
                 </div>

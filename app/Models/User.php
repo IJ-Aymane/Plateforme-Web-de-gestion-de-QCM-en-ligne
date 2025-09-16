@@ -69,6 +69,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Qcm::class, 'enseignant_id');
     }
+    
+    public function qcms(): HasMany
+    {
+        return $this->hasMany(Qcm::class, 'enseignant_id');
+    }
 
     public function resultats(): HasMany
     {
